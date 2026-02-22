@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ArrayExt.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 2/21/26.
