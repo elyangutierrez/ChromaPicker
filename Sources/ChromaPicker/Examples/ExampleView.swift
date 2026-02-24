@@ -9,7 +9,12 @@ import SwiftUI
 
 struct ExampleView: View {
     
-    @State private var color: Color = .red
+    @State private var stops: [Gradient.Stop] = [
+        .init(color: .blue, location: 0.2),
+        .init(color: .red, location: 0.5),
+        .init(color: .green, location: 0.7)
+    ]
+    @State private var color: Color = .blue
     
     var body: some View {
         NavigationStack {
@@ -17,7 +22,7 @@ struct ExampleView: View {
                 VStack(spacing: 15) {
                     VStack {
                         RoundedRectangle(cornerRadius: 15.0)
-                            .fill(color)
+                            .fill(Gradient(stops: stops))
                             .frame(width: g.size.width * 0.85, height: g.size.height * 0.4)
                     }
                     
@@ -28,7 +33,7 @@ struct ExampleView: View {
                             
                             Spacer()
                             
-                            ChromaPicker(selection: $color)
+                            ChromaPicker(selection: $stops)
                         }
                     }
                 }

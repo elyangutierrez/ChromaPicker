@@ -12,5 +12,5 @@ public protocol ChromaSelection {
     associatedtype V: View
     
     @ViewBuilder
-    func makePickerView(binding: Binding<Self>) -> V // make the view based on the type given
+    func makePickerView(_ binding: Binding<Self>) -> V // make the view based on the type given
 }

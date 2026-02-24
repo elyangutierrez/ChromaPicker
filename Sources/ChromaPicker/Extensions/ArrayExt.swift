@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Array: ChromaSelection where Element == Gradient.Stop {
-    public func makePickerView(binding: Binding<Array<Gradient.Stop>>) -> some View {
+    public func makePickerView(_ binding: Binding<Array<Gradient.Stop>>) -> some View {
         Text("Multiple Colors")
     }
 }
