@@ -25,7 +25,8 @@ struct ColorPickerView: View {
     @State private var valueScale: CGFloat = 1.0
     @State private var alphaScale: CGFloat = 1.0
     
-    let MAX_SCALE = 1.2
+    let PICKER_MAX_SCALE = 1.2
+    let SLIDER_MAX_SCALE = 1.4
     let MIN_SCALE = 1.0
     
     @Binding var color: Color
@@ -63,6 +64,7 @@ struct ColorPickerView: View {
                 
                 VStack(spacing: 25) {
                     ZStack {
+                        
                         RoundedRectangle(cornerRadius: 15.0)
                             .stroke(.gray, lineWidth: 0.5)
                             .fill(.regularMaterial)
@@ -70,32 +72,8 @@ struct ColorPickerView: View {
                             .gesture(
                                 DragGesture()
                                     .onChanged { newValue in
-                                        let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
-                                        let maxRadius = min(pickerSize.width * 0.85, pickerSize.height * 0.85) / 2.0 // 0.85 gives wheel some padding so that it doesn't extend outside rect
-
                                         let location = newValue.location
-
-                                        let dx = location.x - center.x
-                                        let dy = location.y - center.y
-
-                                        let distance = hypot(dx, dy)
-                                        let angle = atan2(dy, dx)
-
-                                        if distance > maxRadius {
-                                            let clampedX = center.x + (maxRadius * cos(angle))
-                                            let clampedY = center.y + (maxRadius * sin(angle))
-                                            setCursor(value: CGPoint(x: clampedX, y: clampedY))
-                                        } else {
-                                            setCursor(value: location)
-                                        }
-
-                                        let clampedDistance = min(distance, maxRadius)
-                                        let saturation = clampedDistance / maxRadius // normalize saturation
-                                        var hue = angle / (2 * .pi)
-                                        if hue < 0 { hue += 1.0 } // normalize hue
-                                        
-                                        hsvToRgb(h: hue, s: saturation, v: value, a: alpha)
-                                        setScale(value: MAX_SCALE, type: .color)
+                                        picker(location: location)
                                     }
                                     .onEnded { _ in
                                         setScale(value: MIN_SCALE, type: .color)
@@ -150,26 +128,7 @@ struct ColorPickerView: View {
                                             DragGesture()
                                                 .onChanged { newValue in
                                                     let location = newValue.location
-                                                    
-                                                    let normalizedX = location.x / valueSize.width
-                                                    let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
-                                                    
-                                                    let horizontalInset = valueSize.width * 0.050
-                                                    
-                                                    let usableWidth = valueSize.width - (horizontalInset * 2.0)
-                                                    
-                                                    let cursorX = horizontalInset + (usableWidth * clampedX)
-                                                    let cursorY = valueSize.height / 2.0
-                                                    
-                                                    withAnimation(.spring(duration: 0.3)) {
-                                                        valueCursor = CGPoint(x: cursorX, y: cursorY)
-                                                        
-                                                        value = clampedX
-                                                        
-                                                        let (h,s,_,_) = colorToHsv(color: color)
-                                                        hsvToRgb(h: h, s: s, v: value, a: alpha)
-                                                    }
-                                                    setScale(value: MAX_SCALE, type: .value)
+                                                    slider(location: location, type: .value)
                                                 }
                                                 .onEnded { _ in
                                                     setScale(value: MIN_SCALE, type: .value)
@@ -216,26 +175,7 @@ struct ColorPickerView: View {
                                             DragGesture()
                                                 .onChanged { newValue in
                                                     let location = newValue.location
-                                                    
-                                                    let normalizedX = location.x / alphaSize.width
-                                                    let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
-                                                    
-                                                    let horizontalInset = alphaSize.width * 0.050
-                                                    
-                                                    let usableWidth = alphaSize.width - (horizontalInset * 2.0)
-                                                    
-                                                    let cursorX = horizontalInset + (usableWidth * clampedX)
-                                                    let cursorY = alphaSize.height / 2.0
-                                                    
-                                                    withAnimation(.spring(duration: 0.3)) {
-                                                        alphaCursor = CGPoint(x: cursorX, y: cursorY)
-                                                        
-                                                        alpha = clampedX
-                                                        
-                                                        let (h,s,_,_) = colorToHsv(color: color)
-                                                        hsvToRgb(h: h, s: s, v: value, a: alpha)
-                                                    }
-                                                    setScale(value: MAX_SCALE, type: .alpha)
+                                                    slider(location: location, type: .alpha)
                                                 }
                                                 .onEnded { _ in
                                                     setScale(value: MIN_SCALE, type: .alpha)
@@ -335,6 +275,80 @@ struct ColorPickerView: View {
     func setCursor(value: CGPoint) {
         withAnimation(.spring(duration: 0.3)) {
             pickerCursor = value
+        }
+    }
+    
+    func picker(location: CGPoint) {
+        let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
+        let maxRadius = min(pickerSize.width * 0.85, pickerSize.height * 0.85) / 2.0 // 0.85 gives wheel some padding so that it doesn't extend outside rect
+
+        let dx = location.x - center.x
+        let dy = location.y - center.y
+
+        let distance = hypot(dx, dy)
+        let angle = atan2(dy, dx)
+
+        if distance > maxRadius {
+            let clampedX = center.x + (maxRadius * cos(angle))
+            let clampedY = center.y + (maxRadius * sin(angle))
+            setCursor(value: CGPoint(x: clampedX, y: clampedY))
+        } else {
+            setCursor(value: location)
+        }
+
+        let clampedDistance = min(distance, maxRadius)
+        let saturation = clampedDistance / maxRadius // normalize saturation
+        var hue = angle / (2 * .pi)
+        if hue < 0 { hue += 1.0 } // normalize hue
+        
+        hsvToRgb(h: hue, s: saturation, v: value, a: alpha)
+        setScale(value: PICKER_MAX_SCALE, type: .color)
+    }
+    
+    func slider(location: CGPoint, type: PickerType) {
+        switch type {
+        case .value:
+            let normalizedX = location.x / valueSize.width
+            let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
+            
+            let horizontalInset = valueSize.width * 0.050
+            
+            let usableWidth = valueSize.width - (horizontalInset * 2.0)
+            
+            let cursorX = horizontalInset + (usableWidth * clampedX)
+            let cursorY = valueSize.height / 2.0
+            
+            withAnimation(.spring(duration: 0.3)) {
+                valueCursor = CGPoint(x: cursorX, y: cursorY)
+                
+                value = clampedX
+                
+                let (h,s,_,_) = colorToHsv(color: color)
+                hsvToRgb(h: h, s: s, v: value, a: alpha)
+            }
+            setScale(value: SLIDER_MAX_SCALE, type: .value)
+        case .alpha:
+            let normalizedX = location.x / alphaSize.width
+            let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
+            
+            let horizontalInset = alphaSize.width * 0.050
+            
+            let usableWidth = alphaSize.width - (horizontalInset * 2.0)
+            
+            let cursorX = horizontalInset + (usableWidth * clampedX)
+            let cursorY = alphaSize.height / 2.0
+            
+            withAnimation(.spring(duration: 0.3)) {
+                alphaCursor = CGPoint(x: cursorX, y: cursorY)
+                
+                alpha = clampedX
+                
+                let (h,s,_,_) = colorToHsv(color: color)
+                hsvToRgb(h: h, s: s, v: value, a: alpha)
+            }
+            setScale(value: SLIDER_MAX_SCALE, type: .alpha)
+        default:
+            return
         }
     }
     
