@@ -92,10 +92,10 @@ struct ColorPickerView: View {
                             }
                         
                         Circle()
-                            .fill(
-                                colorScheme == .light ?
-                                Color.black.mix(with: color, by: 0.5) :
-                                Color.white.mix(with: color, by: 0.3)
+                            .glassEffect(
+                                .clear.tint(
+                                    color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3)
+                                )
                             )
                             .frame(width: 28, height: 28)
                             .overlay {
@@ -161,10 +161,10 @@ struct ColorPickerView: View {
                                         }
                                     
                                     Circle()
-                                        .fill(
-                                            colorScheme == .light ?
-                                            Color.black.mix(with: color, by: 0.5) :
-                                            Color.white.mix(with: color, by: 0.3)
+                                        .glassEffect(
+                                            .clear.tint(
+                                                color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3)
+                                            )
                                         )
                                         .frame(width: 25, height: 25)
                                         .overlay {
@@ -211,10 +211,10 @@ struct ColorPickerView: View {
                                         }
                                 
                                     Circle()
-                                        .fill(
-                                            colorScheme == .light ?
-                                            Color.black.mix(with: color, by: 0.5) :
-                                            Color.white.mix(with: color, by: 0.3)
+                                        .glassEffect(
+                                            .clear.tint(
+                                                color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3)
+                                            )
                                         )
                                         .frame(width: 25, height: 25)
                                         .overlay {
