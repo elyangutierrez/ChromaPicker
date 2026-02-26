@@ -64,7 +64,6 @@ struct ColorPickerView: View {
                 
                 VStack(spacing: 25) {
                     ZStack {
-                        
                         RoundedRectangle(cornerRadius: 15.0)
                             .stroke(.gray, lineWidth: 0.5)
                             .fill(.regularMaterial)
@@ -73,12 +72,19 @@ struct ColorPickerView: View {
                                 DragGesture()
                                     .onChanged { newValue in
                                         let location = newValue.location
-                                        picker(location: location)
+                                        Task {
+                                            await picker(location: location, isTap: false)
+                                        }
                                     }
                                     .onEnded { _ in
                                         setScale(value: MIN_SCALE, type: .color)
                                     }
                             )
+                            .onTapGesture { location in
+                                Task {
+                                    await picker(location: location, isTap: true)
+                                }
+                            }
                             .geometryReader { g in
                                 pickerSize = g?.size ?? .zero
                                 let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
@@ -128,12 +134,19 @@ struct ColorPickerView: View {
                                             DragGesture()
                                                 .onChanged { newValue in
                                                     let location = newValue.location
-                                                    slider(location: location, type: .value)
+                                                    Task {
+                                                        await slider(location: location, type: .value, isTap: false)
+                                                    }
                                                 }
                                                 .onEnded { _ in
                                                     setScale(value: MIN_SCALE, type: .value)
                                                 }
                                         )
+                                        .onTapGesture { location in
+                                            Task {
+                                                await slider(location: location, type: .value, isTap: true)
+                                            }
+                                        }
                                         .geometryReader { g in
                                             valueSize = g?.size ?? .zero
                                             
@@ -175,7 +188,10 @@ struct ColorPickerView: View {
                                             DragGesture()
                                                 .onChanged { newValue in
                                                     let location = newValue.location
-                                                    slider(location: location, type: .alpha)
+                                                    
+                                                    Task {
+                                                        await slider(location: location, type: .alpha, isTap: false)
+                                                    }
                                                 }
                                                 .onEnded { _ in
                                                     setScale(value: MIN_SCALE, type: .alpha)
@@ -278,7 +294,7 @@ struct ColorPickerView: View {
         }
     }
     
-    func picker(location: CGPoint) {
+    func picker(location: CGPoint, isTap: Bool) async {
         let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
         let maxRadius = min(pickerSize.width * 0.85, pickerSize.height * 0.85) / 2.0 // 0.85 gives wheel some padding so that it doesn't extend outside rect
 
@@ -303,9 +319,14 @@ struct ColorPickerView: View {
         
         hsvToRgb(h: hue, s: saturation, v: value, a: alpha)
         setScale(value: PICKER_MAX_SCALE, type: .color)
+        
+        if isTap {
+            try? await Task.sleep(nanoseconds: 350000000)
+            setScale(value: MIN_SCALE, type: .color)
+        }
     }
     
-    func slider(location: CGPoint, type: PickerType) {
+    func slider(location: CGPoint, type: PickerType, isTap: Bool) async {
         switch type {
         case .value:
             let normalizedX = location.x / valueSize.width
@@ -327,6 +348,11 @@ struct ColorPickerView: View {
                 hsvToRgb(h: h, s: s, v: value, a: alpha)
             }
             setScale(value: SLIDER_MAX_SCALE, type: .value)
+            
+            if isTap {
+                try? await Task.sleep(nanoseconds: 350000000)
+                setScale(value: MIN_SCALE, type: .value)
+            }
         case .alpha:
             let normalizedX = location.x / alphaSize.width
             let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
@@ -347,6 +373,11 @@ struct ColorPickerView: View {
                 hsvToRgb(h: h, s: s, v: value, a: alpha)
             }
             setScale(value: SLIDER_MAX_SCALE, type: .alpha)
+            
+            if isTap {
+                try? await Task.sleep(nanoseconds: 500000000)
+                setScale(value: MIN_SCALE, type: .alpha)
+            }
         default:
             return
         }
