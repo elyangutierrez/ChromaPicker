@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PickerType: CaseIterable {
+internal enum PickerType: CaseIterable {
     case color
     case value
     case alpha

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Checkerboard: View {
+internal struct Checkerboard: View {
     var color: Color
     var squareSize: CGFloat = 8.0
     
