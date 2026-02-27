@@ -26,23 +26,42 @@ internal struct ColorPickerView: View {
             VStack(spacing: 25.0) {
                 
                 HStack {
+                    
+                    HStack(spacing: 10) {
+                        Button(action: {
+                            Haptics.button()
+                            withAnimation(.spring(duration: 0.3)) {
+                                vm.reset(color: &color)
+                            }
+                        }) {
+                            ZStack {
+                                Image(systemName: "arrow.trianglehead.2.counterclockwise.rotate.90")
+                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.7)
+                            }
+                        }
+                        
+                        Button(action: {
+                            Haptics.button()
+                            withAnimation(.spring(duration: 0.3)) {
+                                vm.shuffle(color: &color)
+                            }
+                        }) {
+                            ZStack {
+                                Image(systemName: "shuffle")
+                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.6)
+                            }
+                        }
+                    }
+                    
                     Spacer()
                     
                     Button(action: {
+                        Haptics.button()
                         dismiss()
                     }) {
                         ZStack {
                             Image(systemName: "xmark")
-                                .resizable()
-                                .scaledToFit()
-                                .font(.headline)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(Color(white: colorScheme == .dark ? 0.62 : 0.51))
-                                .scaleEffect(0.5)
-                                .background(
-                                    Circle()
-                                        .fill(buttonBackgroundColor)
-                                )
+                                .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
                         }
                     }
                 }

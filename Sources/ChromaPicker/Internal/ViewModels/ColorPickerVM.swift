@@ -330,4 +330,26 @@ class ColorPickerVM {
     func clamp<T: Comparable>(_ value: T, min minimum: T, max maximum: T) -> T {
         return max(minimum, min(value, maximum))
     }
+    
+    func shuffle(color: inout Color) {
+        let randomRed = Double.random(in: 0.0...1.0)
+        let randomGreen = Double.random(in: 0.0...1.0)
+        let randomBlue = Double.random(in: 0.0...1.0)
+        
+        let rgb = UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+        color = Color(uiColor: rgb)
+        
+        setInputs(color: &color)
+        setInitialPickerCursor(color: &color)
+        setInitialSliderCursors(color: &color)
+    }
+    
+    func reset(color: inout Color) {
+        let white = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        color = Color(uiColor: white)
+        
+        setInputs(color: &color)
+        setInitialPickerCursor(color: &color)
+        setInitialSliderCursors(color: &color)
+    }
 }
