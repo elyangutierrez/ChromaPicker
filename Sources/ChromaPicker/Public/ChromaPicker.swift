@@ -52,6 +52,10 @@ public struct ChromaPicker<S: ChromaSelection>: View {
     
     @Binding var selection: S
     
+    public init(selection: Binding<S>) {
+        self._selection = selection
+    }
+    
     public var body: some View {
         Button(action: {
             isShowingView.toggle()
