@@ -76,6 +76,7 @@ public struct ChromaPicker<S: ChromaSelection>: View {
         .buttonStyle(.plain)
         .sheet(isPresented: $isShowingView) {
             selection.makePickerView($selection)
+                .presentationDetents([.fraction(0.8)])
         }
     }
 }
