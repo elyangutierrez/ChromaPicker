@@ -182,6 +182,9 @@ class ColorPickerVM {
         
         let (h,s,v,a) = colorToHsv(color: color)
         
+        value = v
+        alpha = a
+        
         let angle = h * 2.0 * .pi
         let currentRadius = maxRadius * s
         
@@ -196,6 +199,9 @@ class ColorPickerVM {
     func setInitialSliderCursors(color: inout Color) {
         
         let (_,_,v,a) = colorToHsv(color: color)
+        
+        value = v
+        alpha = a
         
         let horizontalInset = valueSize.width * 0.025
         
@@ -336,7 +342,7 @@ class ColorPickerVM {
         let randomGreen = Double.random(in: 0.0...1.0)
         let randomBlue = Double.random(in: 0.0...1.0)
         
-        let rgb = UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+        let rgb = UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: alpha)
         color = Color(uiColor: rgb)
         
         setInputs(color: &color)
@@ -345,7 +351,7 @@ class ColorPickerVM {
     }
     
     func reset(color: inout Color) {
-        let white = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        let white = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: alpha)
         color = Color(uiColor: white)
         
         setInputs(color: &color)
