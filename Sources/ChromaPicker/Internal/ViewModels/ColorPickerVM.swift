@@ -197,7 +197,7 @@ class ColorPickerVM {
         
         let (_,_,v,a) = colorToHsv(color: color)
         
-        let horizontalInset = valueSize.width * 0.050
+        let horizontalInset = valueSize.width * 0.025
         
         let usableWidth = valueSize.width - (horizontalInset * 2.0)
         
@@ -250,7 +250,7 @@ class ColorPickerVM {
             let normalizedX = location.x / valueSize.width
             let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
             
-            let horizontalInset = valueSize.width * 0.050
+            let horizontalInset = valueSize.width * 0.025
             let usableWidth = valueSize.width - (horizontalInset * 2.0)
             let cursorX = horizontalInset + (usableWidth * clampedX)
             let cursorY = valueSize.height / 2.0
@@ -274,7 +274,7 @@ class ColorPickerVM {
             let normalizedX = location.x / alphaSize.width
             let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
             
-            let horizontalInset = alphaSize.width * 0.050
+            let horizontalInset = alphaSize.width * 0.025
             let usableWidth = alphaSize.width - (horizontalInset * 2.0)
             let cursorX = horizontalInset + (usableWidth * clampedX)
             let cursorY = alphaSize.height / 2.0

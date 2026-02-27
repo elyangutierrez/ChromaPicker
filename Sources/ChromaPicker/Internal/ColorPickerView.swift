@@ -90,19 +90,6 @@ internal struct ColorPickerView: View {
                     
                     VStack {
                         HStack(spacing: 15) {
-                            VStack {
-                                Button(action: {
-                                    // MARK: Do this later...
-                                }) {
-                                    Image(systemName: "eyedropper")
-                                        .font(.title)
-                                        .fontWeight(.medium)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            
-                            Spacer()
-                            
                             VStack(spacing: 15) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 15.0)
@@ -127,7 +114,7 @@ internal struct ColorPickerView: View {
                                         .geometryReader { g in
                                             vm.valueSize = g?.size ?? .zero
                                             
-                                            let horizontalInset = vm.valueSize.width * 0.050
+                                            let horizontalInset = vm.valueSize.width * 0.025
                                             
                                             let usableWidth = vm.valueSize.width - (horizontalInset * 2.0)
                                             
@@ -178,7 +165,7 @@ internal struct ColorPickerView: View {
                                         .geometryReader { g in
                                             vm.alphaSize = g?.size ?? .zero
                                             
-                                            let horizontalInset = vm.alphaSize.width * 0.050
+                                            let horizontalInset = vm.alphaSize.width * 0.025
                                             
                                             let usableWidth = vm.alphaSize.width - (horizontalInset * 2.0)
                                             
