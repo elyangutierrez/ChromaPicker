@@ -73,18 +73,15 @@ internal struct ColorPickerView: View {
                             .fill(.regularMaterial)
                             .frame(maxWidth: .infinity, minHeight: 375)
                             .gesture(
-                                DragGesture()
+                                DragGesture(minimumDistance: 0.0)
                                     .onChanged { newValue in
-                                        let location = newValue.location
-                                        vm.picker(location: location, isTap: false, color: &color)
+                                        vm.setScaleUp(type: .color)
+                                        vm.picker(location: newValue.location, color: &color)
                                     }
                                     .onEnded { _ in
-                                        vm.setScale(value: vm.MIN_SCALE, type: .color)
+                                        vm.setScaleDown(type: .color)
                                     }
                             )
-                            .onTapGesture { location in
-                                vm.picker(location: location, isTap: true, color: &color)
-                            }
                             .geometryReader { g in
                                 vm.pickerSize = g?.size ?? .zero
                                 let center = CGPoint(x: vm.pickerSize.width / 2.0, y: vm.pickerSize.height / 2.0)
@@ -116,16 +113,13 @@ internal struct ColorPickerView: View {
                                         .gesture(
                                             DragGesture()
                                                 .onChanged { newValue in
-                                                    let location = newValue.location
-                                                    vm.slider(location: location, type: .value, isTap: false, color: &color)
+                                                    vm.setScaleUp(type: .value)
+                                                    vm.slider(location: newValue.location, type: .value, color: &color)
                                                 }
                                                 .onEnded { _ in
-                                                    vm.setScale(value: vm.MIN_SCALE, type: .value)
+                                                    vm.setScaleDown(type: .value)
                                                 }
                                         )
-                                        .onTapGesture { location in
-                                            vm.slider(location: location, type: .value, isTap: true, color: &color)
-                                        }
                                         .geometryReader { g in
                                             vm.valueSize = g?.size ?? .zero
                                             
@@ -162,17 +156,13 @@ internal struct ColorPickerView: View {
                                         .gesture(
                                             DragGesture()
                                                 .onChanged { newValue in
-                                                    let location = newValue.location
-                                                    
-                                                    vm.slider(location: location, type: .alpha, isTap: false, color: &color)
+                                                    vm.setScaleUp(type: .alpha)
+                                                    vm.slider(location: newValue.location, type: .alpha, color: &color)
                                                 }
                                                 .onEnded { _ in
-                                                    vm.setScale(value: vm.MIN_SCALE, type: .alpha)
+                                                    vm.setScaleDown(type: .alpha)
                                                 }
                                         )
-                                        .onTapGesture { location in
-                                            vm.slider(location: location, type: .alpha, isTap: true, color: &color)
-                                        }
                                         .geometryReader { g in
                                             vm.alphaSize = g?.size ?? .zero
                                             
