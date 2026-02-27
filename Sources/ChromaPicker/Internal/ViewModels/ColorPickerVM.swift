@@ -23,6 +23,10 @@ class ColorPickerVM {
     var valueScale: CGFloat = 1.0
     var alphaScale: CGFloat = 1.0
     
+    var pickerScaleTask: Task<Void, Never>?
+    var valueScaleTask: Task<Void, Never>?
+    var alphaScaleTask: Task<Void, Never>?
+    
     var colorModel: ColorModel = .hsv
     
     var hexValue: String = "#FFFFFF"
@@ -34,6 +38,48 @@ class ColorPickerVM {
     let PICKER_MAX_SCALE = 1.2
     let SLIDER_MAX_SCALE = 1.4
     let MIN_SCALE = 1.0
+    
+    func setScaleUp(type: PickerType) {
+        switch type {
+        case .color:
+            pickerScaleTask?.cancel()
+            withAnimation(.spring(duration: 0.3)) { pickerScale = PICKER_MAX_SCALE }
+        case .value:
+            valueScaleTask?.cancel()
+            withAnimation(.spring(duration: 0.3)) { valueScale = PICKER_MAX_SCALE }
+        case .alpha:
+            alphaScaleTask?.cancel()
+            withAnimation(.spring(duration: 0.3)) { alphaScale = PICKER_MAX_SCALE }
+        }
+    }
+    
+    func setScaleDown(type: PickerType) {
+        let task = Task {
+            try? await Task.sleep(nanoseconds: 150_000_000) // guarantees cursor will pop to max scale even if user taps fast
+            
+            guard !Task.isCancelled else { return }
+            
+            withAnimation(.spring(duration: 0.3)) {
+                switch type {
+                case .color:
+                    self.pickerScale = MIN_SCALE
+                case .value:
+                    self.valueScale = MIN_SCALE
+                case .alpha:
+                    self.alphaScale = MIN_SCALE
+                }
+            }
+        }
+        
+        switch type {
+        case .color:
+            pickerScaleTask = task
+        case .value:
+            valueScaleTask = task
+        case .alpha:
+            alphaScaleTask = task
+        }
+    }
     
     func setScale(value: CGFloat, type: PickerType) {
         switch type {
@@ -215,7 +261,7 @@ class ColorPickerVM {
         alphaCursor = CGPoint(x: alphaCursorX, y: cursorY)
     }
     
-    func picker(location: CGPoint, isTap: Bool, color: inout Color) {
+    func picker(location: CGPoint, color: inout Color) {
         let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
         let maxRadius = min(pickerSize.width * 0.85, pickerSize.height * 0.85) / 2.0
 
@@ -239,18 +285,10 @@ class ColorPickerVM {
         if hue < 0 { hue += 1.0 }
         
         hsvToRgb(h: hue, s: saturation, v: value, a: alpha, color: &color)
-        setScale(value: PICKER_MAX_SCALE, type: .color)
         setInputs(color: &color)
-        
-        if isTap {
-            Task {
-                try? await Task.sleep(nanoseconds: 350_000_000)
-                self.setScale(value: self.MIN_SCALE, type: .color)
-            }
-        }
     }
 
-    func slider(location: CGPoint, type: PickerType, isTap: Bool, color: inout Color) {
+    func slider(location: CGPoint, type: PickerType, color: inout Color) {
         switch type {
         case .value:
             let normalizedX = location.x / valueSize.width
@@ -266,16 +304,7 @@ class ColorPickerVM {
             
             let (h,s,_,_) = colorToHsv(color: color)
             hsvToRgb(h: h, s: s, v: value, a: alpha, color: &color)
-            
-            setScale(value: SLIDER_MAX_SCALE, type: .value)
             setInputs(color: &color)
-            
-            if isTap {
-                Task {
-                    try? await Task.sleep(nanoseconds: 350_000_000)
-                    self.setScale(value: self.MIN_SCALE, type: .value)
-                }
-            }
         case .alpha:
             let normalizedX = location.x / alphaSize.width
             let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
@@ -285,23 +314,13 @@ class ColorPickerVM {
             let cursorX = horizontalInset + (usableWidth * clampedX)
             let cursorY = alphaSize.height / 2.0
             
-            // 1. Instantly update position and values
+           
             alphaCursor = CGPoint(x: cursorX, y: cursorY)
             alpha = clampedX
             
             let (h,s,_,_) = colorToHsv(color: color)
             hsvToRgb(h: h, s: s, v: value, a: alpha, color: &color)
-            
-            setScale(value: SLIDER_MAX_SCALE, type: .alpha)
             setInputs(color: &color)
-            
-            // 2. Handle tap delay
-            if isTap {
-                Task {
-                    try? await Task.sleep(nanoseconds: 350_000_000)
-                    self.setScale(value: self.MIN_SCALE, type: .alpha)
-                }
-            }
         default:
             return
         }
