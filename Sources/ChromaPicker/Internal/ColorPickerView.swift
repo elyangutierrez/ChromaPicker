@@ -92,11 +92,7 @@ internal struct ColorPickerView: View {
                             }
                         
                         Circle()
-                            .glassEffect(
-                                .clear.tint(
-                                    color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3)
-                                )
-                            )
+                            .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
                             .frame(width: 28, height: 28)
                             .overlay {
                                 Circle()
@@ -144,11 +140,7 @@ internal struct ColorPickerView: View {
                                         }
                                     
                                     Circle()
-                                        .glassEffect(
-                                            .clear.tint(
-                                                color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3)
-                                            )
-                                        )
+                                        .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
                                         .frame(width: 25, height: 25)
                                         .overlay {
                                             Circle()
@@ -195,11 +187,7 @@ internal struct ColorPickerView: View {
                                         }
                                 
                                     Circle()
-                                        .glassEffect(
-                                            .clear.tint(
-                                                color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3)
-                                            )
-                                        )
+                                        .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
                                         .frame(width: 25, height: 25)
                                         .overlay {
                                             Circle()
