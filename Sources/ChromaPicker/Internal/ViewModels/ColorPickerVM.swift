@@ -371,8 +371,11 @@ class ColorPickerVM {
     }
     
     func reset(color: inout Color) {
-        let white = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: alpha)
+        let white = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         color = Color(uiColor: white)
+        
+        value = 1.0
+        alpha = 1.0
         
         setInputs(color: &color)
         setInitialPickerCursor(color: &color)

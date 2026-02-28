@@ -110,7 +110,7 @@ internal struct ColorPickerView: View {
                                     )
                                     .frame(height: 32)
                                     .gesture(
-                                        DragGesture()
+                                        DragGesture(minimumDistance: 0.0)
                                             .onChanged { newValue in
                                                 vm.setScaleUp(type: .value)
                                                 vm.slider(location: newValue.location, type: .value, color: &color)
@@ -153,7 +153,7 @@ internal struct ColorPickerView: View {
                                             .clipShape(RoundedRectangle(cornerRadius: 15.0))
                                     )
                                     .gesture(
-                                        DragGesture()
+                                        DragGesture(minimumDistance: 0.0)
                                             .onChanged { newValue in
                                                 vm.setScaleUp(type: .alpha)
                                                 vm.slider(location: newValue.location, type: .alpha, color: &color)
