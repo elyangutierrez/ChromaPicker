@@ -14,7 +14,7 @@ internal extension Image {
             .resizable()
             .scaledToFit()
             .font(.headline)
-            .frame(width: 30, height: 30)
+            .frame(width: 35, height: 35)
             .foregroundColor(Color(white: colorScheme == .dark ? 0.62 : 0.51))
             .scaleEffect(scale)
             .background(

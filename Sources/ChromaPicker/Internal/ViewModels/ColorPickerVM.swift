@@ -35,6 +35,7 @@ class ColorPickerVM {
     var textboxThree: Double = 0.0
     var alphaTextbox: Double = 100.0
     
+    let HORIZONTAL_INSET_VALUE = 0.04
     let PICKER_MAX_SCALE = 1.2
     let SLIDER_MAX_SCALE = 1.4
     let MIN_SCALE = 1.0
@@ -249,7 +250,7 @@ class ColorPickerVM {
         value = v
         alpha = a
         
-        let horizontalInset = valueSize.width * 0.025
+        let horizontalInset = valueSize.width * HORIZONTAL_INSET_VALUE
         
         let usableWidth = valueSize.width - (horizontalInset * 2.0)
         
@@ -294,7 +295,7 @@ class ColorPickerVM {
             let normalizedX = location.x / valueSize.width
             let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
             
-            let horizontalInset = valueSize.width * 0.025
+            let horizontalInset = valueSize.width * HORIZONTAL_INSET_VALUE
             let usableWidth = valueSize.width - (horizontalInset * 2.0)
             let cursorX = horizontalInset + (usableWidth * clampedX)
             let cursorY = valueSize.height / 2.0
@@ -309,7 +310,7 @@ class ColorPickerVM {
             let normalizedX = location.x / alphaSize.width
             let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
             
-            let horizontalInset = alphaSize.width * 0.025
+            let horizontalInset = alphaSize.width * HORIZONTAL_INSET_VALUE
             let usableWidth = alphaSize.width - (horizontalInset * 2.0)
             let cursorX = horizontalInset + (usableWidth * clampedX)
             let cursorY = alphaSize.height / 2.0
