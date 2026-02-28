@@ -23,7 +23,7 @@ internal struct ColorPickerView: View {
     var body: some View {
         ScrollView(.vertical) {
             
-            VStack(spacing: 25.0) {
+            VStack(spacing: 15.0) {
                 
                 HStack {
                     
@@ -101,94 +101,92 @@ internal struct ColorPickerView: View {
                     }
                     
                     VStack {
-                        HStack(spacing: 15) {
-                            VStack(spacing: 15) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 15.0)
-                                        .stroke(.gray, lineWidth: 0.5)
-                                        .fill(
-                                            LinearGradient(colors: [.black, color], startPoint: .leading, endPoint: .trailing)
-                                        )
-                                        .frame(height: 25)
-                                        .gesture(
-                                            DragGesture()
-                                                .onChanged { newValue in
-                                                    vm.setScaleUp(type: .value)
-                                                    vm.slider(location: newValue.location, type: .value, color: &color)
-                                                }
-                                                .onEnded { _ in
-                                                    vm.setScaleDown(type: .value)
-                                                }
-                                        )
-                                        .geometryReader { g in
-                                            vm.valueSize = g?.size ?? .zero
-                                            
-                                            let horizontalInset = vm.valueSize.width * 0.025
-                                            
-                                            let usableWidth = vm.valueSize.width - (horizontalInset * 2.0)
-                                            
-                                            let cursorX = horizontalInset + (usableWidth * vm.value)
-                                            let cursorY = vm.valueSize.height / 2.0
-                                            
-                                            vm.valueCursor = CGPoint(x: cursorX, y: cursorY)
-                                        }
-                                    
-                                    Circle()
-                                        .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
-                                        .frame(width: 25, height: 25)
-                                        .overlay {
-                                            Circle()
-                                                .fill(color)
-                                                .frame(width: 15, height: 15)
-                                        }
-                                        .position(vm.valueCursor)
-                                        .scaleEffect(vm.valueScale)
-                                }
+                        VStack(spacing: 20) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 15.0)
+                                    .stroke(.gray, lineWidth: 0.5)
+                                    .fill(
+                                        LinearGradient(colors: [.black, color], startPoint: .leading, endPoint: .trailing)
+                                    )
+                                    .frame(height: 32)
+                                    .gesture(
+                                        DragGesture()
+                                            .onChanged { newValue in
+                                                vm.setScaleUp(type: .value)
+                                                vm.slider(location: newValue.location, type: .value, color: &color)
+                                            }
+                                            .onEnded { _ in
+                                                vm.setScaleDown(type: .value)
+                                            }
+                                    )
+                                    .geometryReader { g in
+                                        vm.valueSize = g?.size ?? .zero
+                                        
+                                        let horizontalInset = vm.valueSize.width * 0.04
+                                        
+                                        let usableWidth = vm.valueSize.width - (horizontalInset * 2.0)
+                                        
+                                        let cursorX = horizontalInset + (usableWidth * vm.value)
+                                        let cursorY = vm.valueSize.height / 2.0
+                                        
+                                        vm.valueCursor = CGPoint(x: cursorX, y: cursorY)
+                                    }
                                 
-                                ZStack {
-                                    Checkerboard(color: color)
-                                        .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                                        .frame(height: 25)
-                                        .background(
-                                            LinearGradient(colors: [.white.opacity(0.0), color], startPoint: .leading, endPoint: .trailing)
-                                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                                        )
-                                        .gesture(
-                                            DragGesture()
-                                                .onChanged { newValue in
-                                                    vm.setScaleUp(type: .alpha)
-                                                    vm.slider(location: newValue.location, type: .alpha, color: &color)
-                                                }
-                                                .onEnded { _ in
-                                                    vm.setScaleDown(type: .alpha)
-                                                }
-                                        )
-                                        .geometryReader { g in
-                                            vm.alphaSize = g?.size ?? .zero
-                                            
-                                            let horizontalInset = vm.alphaSize.width * 0.025
-                                            
-                                            let usableWidth = vm.alphaSize.width - (horizontalInset * 2.0)
-                                            
-                                            let cursorX = horizontalInset + (usableWidth * vm.alpha)
-                                            let cursorY = vm.alphaSize.height / 2.0
-                                            
-                                            vm.alphaCursor = CGPoint(x: cursorX, y: cursorY)
-                                        }
-                                
-                                    Circle()
-                                        .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
-                                        .frame(width: 25, height: 25)
-                                        .overlay {
-                                            Circle()
-                                                .fill(color)
-                                                .frame(width: 15, height: 15)
-                                        }
-                                        .position(vm.alphaCursor)
-                                        .scaleEffect(vm.alphaScale)
-                                }
-
+                                Circle()
+                                    .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
+                                    .frame(width: 30, height: 30)
+                                    .overlay {
+                                        Circle()
+                                            .fill(color)
+                                            .frame(width: 18, height: 18)
+                                    }
+                                    .position(vm.valueCursor)
+                                    .scaleEffect(vm.valueScale)
                             }
+                            
+                            ZStack {
+                                Checkerboard(color: color)
+                                    .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                                    .frame(height: 32)
+                                    .background(
+                                        LinearGradient(colors: [.white.opacity(0.0), color], startPoint: .leading, endPoint: .trailing)
+                                            .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                                    )
+                                    .gesture(
+                                        DragGesture()
+                                            .onChanged { newValue in
+                                                vm.setScaleUp(type: .alpha)
+                                                vm.slider(location: newValue.location, type: .alpha, color: &color)
+                                            }
+                                            .onEnded { _ in
+                                                vm.setScaleDown(type: .alpha)
+                                            }
+                                    )
+                                    .geometryReader { g in
+                                        vm.alphaSize = g?.size ?? .zero
+                                        
+                                        let horizontalInset = vm.alphaSize.width * 0.04
+                                        
+                                        let usableWidth = vm.alphaSize.width - (horizontalInset * 2.0)
+                                        
+                                        let cursorX = horizontalInset + (usableWidth * vm.alpha)
+                                        let cursorY = vm.alphaSize.height / 2.0
+                                        
+                                        vm.alphaCursor = CGPoint(x: cursorX, y: cursorY)
+                                    }
+                            
+                                Circle()
+                                    .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
+                                    .frame(width: 30, height: 30)
+                                    .overlay {
+                                        Circle()
+                                            .fill(color)
+                                            .frame(width: 18, height: 18)
+                                    }
+                                    .position(vm.alphaCursor)
+                                    .scaleEffect(vm.alphaScale)
+                            }
+
                         }
                     }
                     .padding(.horizontal)
