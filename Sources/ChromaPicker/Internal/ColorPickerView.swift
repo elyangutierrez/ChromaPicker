@@ -76,6 +76,8 @@ internal struct ColorPickerView: View {
                                 DragGesture(minimumDistance: 0.0)
                                     .onChanged { newValue in
                                         
+//                                        vm.setGridIntensity(isMoving: true)
+                                        
                                         if !vm.hasTappedCursor {
                                             vm.hasTappedCursor = true
                                             Haptics.tap()
@@ -85,6 +87,9 @@ internal struct ColorPickerView: View {
                                         vm.picker(location: newValue.location, color: &color)
                                     }
                                     .onEnded { _ in
+                                        
+//                                        vm.setGridIntensity(isMoving: false)
+                                        
                                         vm.hasTappedCursor = false
                                         vm.setScaleDown(type: .color)
                                     }
@@ -95,6 +100,8 @@ internal struct ColorPickerView: View {
                                 vm.pickerCursor = CGPoint(x: center.x, y: center.y)
                             }
                         
+                        GridPad(cursor: vm.pickerCursor, dragIntensity: vm.gridIntesity, currentColor: color)
+                        
                         Circle()
                             .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
                             .frame(width: 28, height: 28)
@@ -103,6 +110,8 @@ internal struct ColorPickerView: View {
                                     .fill(color)
                                     .frame(width: 16, height: 16)
                             }
+                            .shadow(color: color.opacity(0.3), radius: 10.0)
+                            .shadow(color: color.opacity(0.3), radius: 10.0)
                             .position(vm.pickerCursor)
                             .scaleEffect(vm.pickerScale)
                     }
