@@ -9,9 +9,10 @@ import Foundation
 import UIKit
 
 internal final class Haptics {
+    
     @MainActor
-    static func button() {
-        let impact = UIImpactFeedbackGenerator(style: .medium)
+    static func tap(style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) {
+        let impact = UIImpactFeedbackGenerator(style: style)
         impact.impactOccurred()
     }
 }

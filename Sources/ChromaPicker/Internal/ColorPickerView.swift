@@ -29,7 +29,7 @@ internal struct ColorPickerView: View {
                     
                     HStack(spacing: 10) {
                         Button(action: {
-                            Haptics.button()
+                            Haptics.tap()
                             withAnimation(.spring(duration: 0.3)) {
                                 vm.reset(color: &color)
                             }
@@ -41,7 +41,7 @@ internal struct ColorPickerView: View {
                         }
                         
                         Button(action: {
-                            Haptics.button()
+                            Haptics.tap()
                             withAnimation(.spring(duration: 0.3)) {
                                 vm.shuffle(color: &color)
                             }
@@ -56,7 +56,7 @@ internal struct ColorPickerView: View {
                     Spacer()
                     
                     Button(action: {
-                        Haptics.button()
+                        Haptics.tap()
                         dismiss()
                     }) {
                         ZStack {
@@ -75,10 +75,17 @@ internal struct ColorPickerView: View {
                             .gesture(
                                 DragGesture(minimumDistance: 0.0)
                                     .onChanged { newValue in
+                                        
+                                        if !vm.hasTappedCursor {
+                                            vm.hasTappedCursor = true
+                                            Haptics.tap()
+                                        }
+                                        
                                         vm.setScaleUp(type: .color)
                                         vm.picker(location: newValue.location, color: &color)
                                     }
                                     .onEnded { _ in
+                                        vm.hasTappedCursor = false
                                         vm.setScaleDown(type: .color)
                                     }
                             )
@@ -112,10 +119,17 @@ internal struct ColorPickerView: View {
                                     .gesture(
                                         DragGesture(minimumDistance: 0.0)
                                             .onChanged { newValue in
+                                                
+                                                if !vm.hasTappedCursor {
+                                                    vm.hasTappedCursor = true
+                                                    Haptics.tap()
+                                                }
+                                                
                                                 vm.setScaleUp(type: .value)
                                                 vm.slider(location: newValue.location, type: .value, color: &color)
                                             }
                                             .onEnded { _ in
+                                                vm.hasTappedCursor = false
                                                 vm.setScaleDown(type: .value)
                                             }
                                     )
@@ -155,10 +169,17 @@ internal struct ColorPickerView: View {
                                     .gesture(
                                         DragGesture(minimumDistance: 0.0)
                                             .onChanged { newValue in
+                                                
+                                                if !vm.hasTappedCursor {
+                                                    vm.hasTappedCursor = true
+                                                    Haptics.tap()
+                                                }
+                                                
                                                 vm.setScaleUp(type: .alpha)
                                                 vm.slider(location: newValue.location, type: .alpha, color: &color)
                                             }
                                             .onEnded { _ in
+                                                vm.hasTappedCursor = false
                                                 vm.setScaleDown(type: .alpha)
                                             }
                                     )

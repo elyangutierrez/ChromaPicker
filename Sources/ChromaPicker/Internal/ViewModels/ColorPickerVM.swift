@@ -27,6 +27,8 @@ class ColorPickerVM {
     var valueScaleTask: Task<Void, Never>?
     var alphaScaleTask: Task<Void, Never>?
     
+    var hasTappedCursor: Bool = false
+    
     var colorModel: ColorModel = .hsv
     
     var hexValue: String = "#FFFFFF"
@@ -263,6 +265,7 @@ class ColorPickerVM {
     }
     
     func picker(location: CGPoint, color: inout Color) {
+
         let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
         let maxRadius = min(pickerSize.width * 0.85, pickerSize.height * 0.85) / 2.0
 
