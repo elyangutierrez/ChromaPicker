@@ -382,9 +382,13 @@ internal struct ColorPickerView: View {
                         }
                     }
                 }
+                
+                Spacer()
+                    .frame(height: 50)
             }
             .padding()
         }
+        .ignoresSafeArea(.keyboard)
         .onAppear {
             vm.setInitialPickerCursor(color: &color)
             vm.setInitialSliderCursors(color: &color)
