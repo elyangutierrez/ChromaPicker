@@ -28,6 +28,7 @@ class ColorPickerVM {
     var alphaScaleTask: Task<Void, Never>?
     
     var hasTappedCursor: Bool = false
+    var gridIntesity: CGFloat = 0.0
     
     var colorModel: ColorModel = .hsv
     
@@ -46,7 +47,10 @@ class ColorPickerVM {
         switch type {
         case .color:
             pickerScaleTask?.cancel()
-            withAnimation(.spring(duration: 0.3)) { pickerScale = PICKER_MAX_SCALE }
+            withAnimation(.spring(duration: 0.3)) {
+                pickerScale = PICKER_MAX_SCALE
+                gridIntesity = 1.0
+            }
         case .value:
             valueScaleTask?.cancel()
             withAnimation(.spring(duration: 0.3)) { valueScale = PICKER_MAX_SCALE }
@@ -65,6 +69,7 @@ class ColorPickerVM {
             withAnimation(.spring(duration: 0.3)) {
                 switch type {
                 case .color:
+                    gridIntesity = 0.0
                     self.pickerScale = MIN_SCALE
                 case .value:
                     self.valueScale = MIN_SCALE
