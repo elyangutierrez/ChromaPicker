@@ -15,17 +15,24 @@ struct ExampleView: View {
         .init(color: .green, location: 0.7)
     ]
     @State private var color: Color = .blue
-    @State private var isShowingSheet: Bool = false
+    @State private var currentMode = "Single"
+    
+    let modes = ["Single", "Stops"]
     
     var body: some View {
         NavigationStack {
             GeometryReader { g in
                 VStack(spacing: 15) {
                     VStack {
-                        RoundedRectangle(cornerRadius: 15.0)
-                            .fill(color)
-//                            .fill(Gradient(stops: stops))
-                            .frame(width: g.size.width * 0.85, height: g.size.height * 0.4)
+                        if currentMode == "Single" {
+                            RoundedRectangle(cornerRadius: 15.0)
+                                .fill(color)
+                                .frame(width: g.size.width * 0.85, height: g.size.height * 0.4)
+                        } else {
+                            RoundedRectangle(cornerRadius: 15.0)
+                                .fill(Gradient(stops: stops))
+                                .frame(width: g.size.width * 0.85, height: g.size.height * 0.4)
+                        }
                     }
                     
                     VStack {
@@ -35,14 +42,24 @@ struct ExampleView: View {
                             
                             Spacer()
                             
-                            ChromaPicker(selection: $color)
+                            if currentMode == "Single" {
+                                ChromaPicker(selection: $color)
+                            } else {
+                                ChromaPicker(selection: $stops)
+                            }
                         }
                         
-                        ColorPicker("", selection: $color)
-                    }
-                    
-                    Button("Show sheet") {
-                        isShowingSheet.toggle()
+                        HStack {
+                            Text("Mode")
+                            
+                            Spacer()
+                            
+                            Picker("", selection: $currentMode) {
+                                ForEach(modes, id: \.self) {
+                                    Text($0)
+                                }
+                            }
+                        }
                     }
                 }
                 .padding()

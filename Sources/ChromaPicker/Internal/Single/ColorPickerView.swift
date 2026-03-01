@@ -27,7 +27,7 @@ internal struct ColorPickerView: View {
                 
                 HStack {
                     
-                    HStack(spacing: 10) {
+                    HStack(spacing: 10.0) {
                         Button(action: {
                             Haptics.tap()
                             withAnimation(.spring(duration: 0.3)) {
@@ -415,6 +415,7 @@ internal struct ColorPickerView: View {
             }
             .padding()
         }
+        .scrollIndicators(.hidden)
         .safeAreaInset(edge: .bottom) {
             Spacer()
                 .frame(height: 30)

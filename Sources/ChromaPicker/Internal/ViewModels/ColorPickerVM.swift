@@ -301,7 +301,7 @@ class ColorPickerVM {
         switch type {
         case .value:
             let normalizedX = location.x / valueSize.width
-            let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
+            let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
             
             let horizontalInset = valueSize.width * HORIZONTAL_INSET_VALUE
             let usableWidth = valueSize.width - (horizontalInset * 2.0)
@@ -316,7 +316,7 @@ class ColorPickerVM {
             setInputs(color: &color)
         case .alpha:
             let normalizedX = location.x / alphaSize.width
-            let clampedX = clamp(normalizedX, min: 0.0, max: 1.0)
+            let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
             
             let horizontalInset = alphaSize.width * HORIZONTAL_INSET_VALUE
             let usableWidth = alphaSize.width - (horizontalInset * 2.0)
@@ -359,10 +359,6 @@ class ColorPickerVM {
         hsvColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         
         color = Color(UIColor(red: red, green: green, blue: blue, alpha: alpha))
-    }
-    
-    func clamp<T: Comparable>(_ value: T, min minimum: T, max maximum: T) -> T {
-        return max(minimum, min(value, maximum))
     }
     
     func shuffle(color: inout Color) {
