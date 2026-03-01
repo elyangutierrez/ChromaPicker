@@ -9,8 +9,8 @@ import SwiftUI
 
 internal struct StopCursorShape: Shape {
     var cornerRadius: CGFloat = 16.0
-        var tailWidth: CGFloat = 24.0
-        var tailHeight: CGFloat = 16.0
+    var tailWidth: CGFloat = 24.0
+    var tailHeight: CGFloat = 16.0
         
     func path(in rect: CGRect) -> Path {
         var path = Path()

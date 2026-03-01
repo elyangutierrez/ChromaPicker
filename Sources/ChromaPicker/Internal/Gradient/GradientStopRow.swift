@@ -19,8 +19,8 @@ internal struct GradientStopRow: View {
     var onRemove: () -> Void
     
     var body: some View {
+        
         HStack {
-            
             VStack {
                 HStack {
                     TextField("", value: Binding(
@@ -38,7 +38,7 @@ internal struct GradientStopRow: View {
                         .onSubmit { updateStop() }
                 }
             }
-            .frame(width: 50, height: 35)
+            .frame(width: 50, height: 40)
             .background(
                 RoundedRectangle(cornerRadius: 7.0)
                     .fill(Color(white: colorScheme == .dark ? 0.19 : 0.90))
@@ -89,12 +89,12 @@ internal struct GradientStopRow: View {
                         }), format: .number)
                         .font(.headline)
                         .multilineTextAlignment(.center)
-                        .onSubmit { updateStop() } // Save on enter!
+                        .onSubmit { updateStop() }
                         .tint(colorScheme == .dark ? .white : .black)
                         .frame(width: 50)
                 }
             }
-            .frame(height: 35)
+            .frame(height: 40)
             .padding(.horizontal)
             .background(
                 RoundedRectangle(cornerRadius: 7.0)
@@ -106,6 +106,7 @@ internal struct GradientStopRow: View {
             
             VStack {
                 Button(action: {
+                    Haptics.tap()
                     onRemove()
                 }) {
                     Image(systemName: "minus")
@@ -115,7 +116,7 @@ internal struct GradientStopRow: View {
             }
         }
         .padding(.horizontal)
-        .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
+        .frame(maxWidth: .infinity, minHeight: 65, maxHeight: 65)
         .background(
             RoundedRectangle(cornerRadius: 5.0)
                 .stroke(.gray, lineWidth: 0.5)

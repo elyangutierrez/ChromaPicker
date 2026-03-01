@@ -8,15 +8,15 @@
 import Foundation
 import SwiftUI
 
-internal struct DraggableStop: Identifiable, Equatable {
+internal struct DraggableStop: Equatable, Identifiable, Comparable {
     var id = UUID()
     var stop: Gradient.Stop
     
-    var location: CGFloat {
-        stop.location
+    var loc: CGFloat {
+        return stop.location
     }
     
-//    static func <(lhs: DraggableStop, rhs: DraggableStop) -> Bool {
-//        return lhs.location < rhs.location
-//    }
+    static func <(lhs: DraggableStop, rhs: DraggableStop) -> Bool {
+        return lhs.loc < rhs.loc
+    }
 }

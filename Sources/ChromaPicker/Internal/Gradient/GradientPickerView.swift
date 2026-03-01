@@ -22,6 +22,8 @@ struct GradientPickerView: View {
     @State private var alphaInput: Double?
     @State private var isShowingSheet: Bool = false
     
+    @State private var stopOffsets: [UUID: CGSize] = [:]
+    
     @Binding var stops: [Gradient.Stop]
     
     var buttonBackgroundColor: Color {
@@ -107,11 +109,10 @@ struct GradientPickerView: View {
                     VStack(spacing: 15.0) {
                         // Iterate over the bindings of our new editable wrapper array
                         ForEach($editableStops) { $item in
-                            
                             GradientStopRow(
-                                stop: $item.stop, // Bind directly to the wrapped Gradient.Stop
+                                stop: $item.stop,
                                 onSelect: {
-                                    // Set the active UUID when they tap the color button
+                                    
                                     withAnimation(.spring(duration: 0.3)) {
                                         selectedId = item.id
                                     }
@@ -122,18 +123,18 @@ struct GradientPickerView: View {
                                 },
                                 onRemove: {
                                     withAnimation(.spring(duration: 0.3)) {
-                                        // Find and remove this specific item by its UUID
+                                       
                                         removeStop(id: item.id)
                                     }
                                 }
                             )
-                            // Highlight the row if it matches the actively selected pin!
+                           
                             .overlay(
                                 RoundedRectangle(cornerRadius: 5.0)
                                     .stroke(selectedId == item.id ? Color.blue : Color.clear, lineWidth: 2.0)
                             )
                             .onTapGesture {
-                                // Also select the row if they just tap anywhere on it
+                               
                                 withAnimation(.spring(duration: 0.3)) {
                                     selectedId = item.id
                                 }
@@ -148,6 +149,7 @@ struct GradientPickerView: View {
             setEditableStops()
         }
         .onChange(of: editableStops) { _, newEditableStops in
+            editableStops.sort()
             stops = newEditableStops.map { $0.stop }.sorted { $0.location < $1.location }
         }
         .scrollIndicators(.hidden)

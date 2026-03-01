@@ -14,9 +14,8 @@ struct ExampleView: View {
         .init(color: .red, location: 0.5),
         .init(color: .green, location: 0.7)
     ]
-    @State private var currentMode = "Single"
     @State private var color: Color = .blue
-    @State private var isShowingSheet: Bool = false
+    @State private var currentMode = "Single"
     
     let modes = ["Single", "Stops"]
     
@@ -61,10 +60,6 @@ struct ExampleView: View {
                                 }
                             }
                         }
-                    }
-                    
-                    Button("Show sheet") {
-                        isShowingSheet.toggle()
                     }
                 }
                 .padding()

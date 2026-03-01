@@ -14,17 +14,9 @@ struct StopCursorView: View {
     var isSelected: Bool
     var color: Color
     
-    var fillColor: any ShapeStyle {
-        if isSelected {
-            return .blue
-        } else {
-            return .regularMaterial
-        }
-    }
-    
     var body: some View {
         StopCursorShape(cornerRadius: 6, tailWidth: 12, tailHeight: 6)
-            .fill(AnyShapeStyle(fillColor))
+            .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
             .frame(width: 30, height: 36)
             .overlay {
                 Rectangle()
@@ -32,13 +24,10 @@ struct StopCursorView: View {
                     .padding(6)
                     .padding(.bottom, 6)
             }
-            .scaleEffect(isSelected ? 1.2 : 1.0)
+            .scaleEffect(isSelected ? 1.3 : 1.0)
     }
 }
 
 #Preview {
-    
-    
-    
-    StopCursorView(isSelected: true, color: .blue)
+    StopCursorView(isSelected: true, color: .red)
 }
