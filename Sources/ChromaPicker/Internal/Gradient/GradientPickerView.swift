@@ -57,17 +57,26 @@ struct GradientPickerView: View {
                 }
                 
                 Spacer()
-                    .frame(height: 15)
+                    .frame(height: 25)
                 
                 VStack {
-                    RoundedRectangle(cornerRadius: 10.0)
-                        .stroke(.gray, lineWidth: 0.5)
-                        .fill(LinearGradient(stops: stops, startPoint: .leading, endPoint: .trailing))
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10.0)
+                            .stroke(.gray, lineWidth: 0.5)
+                            .fill(LinearGradient(stops: stops, startPoint: .leading, endPoint: .trailing))
+                            .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
+                        
+                        VStack {
+                            ForEach(0..<stops.count, id: \.self) { index in
+                                
+                            }
+                        }
                         .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
+                    }
                 }
                 
                 Spacer()
-                    .frame(height: 15)
+                    .frame(height: 25)
                 
                 VStack(spacing: 20) {
                     HStack {
