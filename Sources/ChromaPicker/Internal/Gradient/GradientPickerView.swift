@@ -22,8 +22,6 @@ struct GradientPickerView: View {
     @State private var alphaInput: Double?
     @State private var isShowingSheet: Bool = false
     
-    @State private var stopOffsets: [UUID: CGSize] = [:]
-    
     @Binding var stops: [Gradient.Stop]
     
     var buttonBackgroundColor: Color {
