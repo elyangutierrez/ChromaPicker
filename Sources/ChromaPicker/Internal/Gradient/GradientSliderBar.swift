@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct GradientSliderBar: View {
+    
+    @State private var selectedItem: DraggableStop?
+    @State private var currentCursor: StopCursorView?
+    
     @Binding var editableStops: [DraggableStop]
     @Binding var selectedId: UUID?
     
@@ -47,6 +51,7 @@ struct GradientSliderBar: View {
                             x: item.stop.location * geo.size.width,
                             y: 25
                         )
+                        .zIndex(selectedId == item.id ? 1 : 0) // current cursor gets higher index -> overlay over all others
                 }
             }
             .coordinateSpace(name: "GradientBarSpace")
