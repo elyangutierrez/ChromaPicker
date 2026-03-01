@@ -415,6 +415,7 @@ internal struct ColorPickerView: View {
             }
             .padding()
         }
+        .scrollIndicators(.hidden)
         .safeAreaInset(edge: .bottom) {
             Spacer()
                 .frame(height: 30)
