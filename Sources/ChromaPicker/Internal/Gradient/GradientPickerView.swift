@@ -12,6 +12,7 @@ struct GradientPickerView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
+    @State private var isOrientationLocked: Bool = true
     @State private var editableStops: [DraggableStop] = []
     @State private var selectedStop: Gradient.Stop?
     @State private var selectedIndex: Int?
@@ -31,7 +32,7 @@ struct GradientPickerView: View {
         ScrollView(.vertical) {
             VStack(spacing: 15.0) {
                 VStack {
-                    HStack {
+                    HStack(spacing: 10.0) {
                         Button(action: {
                             Haptics.tap()
                             withAnimation(.spring(duration: 0.3)) {
@@ -41,6 +42,19 @@ struct GradientPickerView: View {
                             ZStack {
                                 Image(systemName: "arrow.trianglehead.2.counterclockwise.rotate.90")
                                     .pickerButtonStyle(colorScheme: colorScheme, scale: 0.7)
+                            }
+                        }
+                        
+                        Button(action: {
+                            Haptics.tap()
+                            withAnimation(.spring(duration: 0.3)) {
+                                isOrientationLocked.toggle()
+                            }
+                        }) {
+                            ZStack {
+                                Image(systemName: isOrientationLocked ? "lock.fill" : "lock.open.fill")
+                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                                    .contentTransition(.symbolEffect(.replace))
                             }
                         }
                         
@@ -149,9 +163,8 @@ struct GradientPickerView: View {
         }) {
             if let index = selectedIndex {
                 let colorBinding = Binding<Color>(
-                    get: { stops[index].color },
+                    get: { editableStops[index].stop.color },
                     set: {
-                        stops[index].color = $0
                         editableStops[index].stop.color = $0
                     }
                 )
@@ -197,7 +210,9 @@ struct GradientPickerView: View {
         let newDraggableStop = DraggableStop(stop: newStop)
         
         editableStops.append(newDraggableStop)
-        updateStopLocations()
+        if !isOrientationLocked {
+            updateStopLocations()
+        }
         
         selectedId = newDraggableStop.id
     }

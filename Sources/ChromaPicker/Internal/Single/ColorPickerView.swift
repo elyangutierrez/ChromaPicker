@@ -27,7 +27,7 @@ internal struct ColorPickerView: View {
                 
                 HStack {
                     
-                    HStack(spacing: 10) {
+                    HStack(spacing: 10.0) {
                         Button(action: {
                             Haptics.tap()
                             withAnimation(.spring(duration: 0.3)) {
