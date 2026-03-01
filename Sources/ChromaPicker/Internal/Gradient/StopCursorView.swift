@@ -32,6 +32,7 @@ struct StopCursorView: View {
                     .padding(6)
                     .padding(.bottom, 6)
             }
+            .scaleEffect(isSelected ? 1.2 : 1.0)
     }
 }
 
@@ -39,5 +40,5 @@ struct StopCursorView: View {
     
     
     
-    StopCursorView(isSelected: true, color: .red)
+    StopCursorView(isSelected: true, color: .blue)
 }

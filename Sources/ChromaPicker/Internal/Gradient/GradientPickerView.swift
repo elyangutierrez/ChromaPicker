@@ -12,8 +12,10 @@ struct GradientPickerView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
+    @State private var editableStops: [DraggableStop] = []
     @State private var selectedStop: Gradient.Stop?
     @State private var selectedIndex: Int?
+    @State private var selectedId: UUID?
     @State private var locationInput: Double?
     @State private var hexInput: String?
     @State private var alphaInput: Double?
@@ -60,19 +62,8 @@ struct GradientPickerView: View {
                     .frame(height: 25)
                 
                 VStack {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10.0)
-                            .stroke(.gray, lineWidth: 0.5)
-                            .fill(LinearGradient(stops: stops, startPoint: .leading, endPoint: .trailing))
-                            .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
-                        
-                        VStack {
-                            ForEach(0..<stops.count, id: \.self) { index in
-                                
-                            }
-                        }
+                    GradientSliderBar(editableStops: $editableStops, selectedId: $selectedId)
                         .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
-                    }
                 }
                 
                 Spacer()
@@ -100,35 +91,50 @@ struct GradientPickerView: View {
                     }
                     
                     VStack(spacing: 15.0) {
-                        ForEach(0..<stops.count, id: \.self) { index in
-                            // Safe binding completely prevents crashes if a stop is deleted while scrolling
-                            let safeBinding = Binding<Gradient.Stop>(
-                                get: {
-                                    guard index < stops.count else { return Gradient.Stop(color: .clear, location: 0) }
-                                    return stops[index]
+                        // Iterate over the bindings of our new editable wrapper array
+                        ForEach($editableStops) { $item in
+                            
+                            GradientStopRow(
+                                stop: $item.stop, // Bind directly to the wrapped Gradient.Stop
+                                onSelect: {
+                                    // Set the active UUID when they tap the color button
+                                    withAnimation(.spring(duration: 0.3)) {
+                                        selectedId = item.id
+                                    }
+                                    
+                                    if let index = editableStops.firstIndex(of: item) {
+                                        selectedIndex = index
+                                    }
                                 },
-                                set: { newValue in
-                                    guard index < stops.count else { return }
-                                    stops[index] = newValue
+                                onRemove: {
+                                    withAnimation(.spring(duration: 0.3)) {
+                                        // Find and remove this specific item by its UUID
+                                        removeStop(id: item.id)
+                                    }
                                 }
                             )
-                            
-                            GradientStopRow(stop: safeBinding, onSelect: {
-                                selectedIndex = index
-                            }, onRemove: {
-                                withAnimation(.spring(duration: 0.3)) {
-                                    removeStop(index: index)
-                                }
-                            })
+                            // Highlight the row if it matches the actively selected pin!
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5.0)
+                                    .stroke(selectedId == item.id ? Color.blue : Color.clear, lineWidth: 2.0)
+                            )
                             .onTapGesture {
-                                selectedStop = nil
-                                if index < stops.count { selectedStop = stops[index] }
+                                // Also select the row if they just tap anywhere on it
+                                withAnimation(.spring(duration: 0.3)) {
+                                    selectedId = item.id
+                                }
                             }
                         }
                     }
                 }
             }
             .padding()
+        }
+        .onAppear {
+            setEditableStops()
+        }
+        .onChange(of: editableStops) { _, newEditableStops in
+            stops = newEditableStops.map { $0.stop }.sorted { $0.location < $1.location }
         }
         .scrollIndicators(.hidden)
         .safeAreaInset(edge: .bottom) {
@@ -144,7 +150,10 @@ struct GradientPickerView: View {
             if let index = selectedIndex {
                 let colorBinding = Binding<Color>(
                     get: { stops[index].color },
-                    set: { stops[index].color = $0 }
+                    set: {
+                        stops[index].color = $0
+                        editableStops[index].stop.color = $0
+                    }
                 )
                 ColorPickerView(color: colorBinding)
             }
@@ -152,34 +161,27 @@ struct GradientPickerView: View {
         
     }
     
+    func setEditableStops() {
+        editableStops = stops.map { DraggableStop(stop: $0) }
+        if let first = editableStops.first { selectedId = first.id }
+    }
+    
     func updateStopLocations() {
+        if editableStops.isEmpty { return }
         
-        if stops.isEmpty {
-            return
-        }
-        
-        let size = stops.count
+        let size = editableStops.count
         
         if size == 1 {
-            stops[0].location = 0.0
+            editableStops[0].stop.location = 0.0
             return
         }
         
         let valPerStop = 1.0 / Double(size - 1)
-        let stopColors = stops.map { $0.color }
-        
-        var newStops: [Gradient.Stop] = []
         
         for index in 0..<size {
-            newStops.append(
-                Gradient.Stop(
-                    color: stopColors[index],
-                    location: valPerStop * Double(index)
-                )
-            )
+            let stopLoc = valPerStop * Double(index)
+            editableStops[index].stop.location = Util.clamp(stopLoc, min: 0.0, max: 1.0)
         }
-        
-        stops = newStops
     }
     
     func addStop() {
@@ -191,21 +193,37 @@ struct GradientPickerView: View {
         let rColor = Color(red: rRed, green: rGre, blue: rBlu)
         
         let newStop = Gradient.Stop(color: rColor, location: 1.0)
-        stops.append(newStop)
+        
+        let newDraggableStop = DraggableStop(stop: newStop)
+        
+        editableStops.append(newDraggableStop)
         updateStopLocations()
+        
+        selectedId = newDraggableStop.id
     }
     
-    func removeStop(index: Int) {
-        if stops.isEmpty {
-            return
-        }
+    func removeStop(id: UUID) {
+        guard editableStops.count > 1 else { return }
         
-        stops.remove(at: index)
-        updateStopLocations()
+        if let index = editableStops.firstIndex(where: { $0.id == id }) {
+            editableStops.remove(at: index)
+            updateStopLocations()
+            
+            if selectedId == id {
+                selectedId = nil
+            }
+        }
     }
     
     func reset() {
-        stops = [.init(color: .white, location: 0.0), .init(color: .black, location: 1.0)]
+        editableStops = []
+        
+        if !editableStops.isEmpty {
+            let first = editableStops.first!
+            
+            selectedId = first.id
+        }
+        
         updateStopLocations()
     }
 }
