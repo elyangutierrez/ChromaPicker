@@ -210,6 +210,7 @@ struct GradientPickerView: View {
         let newDraggableStop = DraggableStop(stop: newStop)
         
         editableStops.append(newDraggableStop)
+        
         if !isOrientationLocked {
             updateStopLocations()
         }
@@ -231,7 +232,17 @@ struct GradientPickerView: View {
     }
     
     func reset() {
+        
+        guard !editableStops.isEmpty else { return }
+        
         editableStops = []
+        
+        let newStops = [
+            DraggableStop(stop: .init(color: .white, location: 0.0)),
+            DraggableStop(stop: .init(color: .black, location: 1.0))
+        ]
+        
+        editableStops = newStops
         
         if !editableStops.isEmpty {
             let first = editableStops.first!
