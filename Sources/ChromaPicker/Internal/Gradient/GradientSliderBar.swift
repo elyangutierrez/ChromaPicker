@@ -22,6 +22,7 @@ struct GradientSliderBar: View {
                 let sortedStops = editableStops.map { $0.stop }.sorted { $0.location < $1.location }
                 
                 RoundedRectangle(cornerRadius: 10.0)
+                    .stroke(.gray, lineWidth: 0.5)
                     .fill(LinearGradient(stops: sortedStops, startPoint: .leading, endPoint: .trailing))
                     .frame(height: 55)
                     .offset(y: 25)
