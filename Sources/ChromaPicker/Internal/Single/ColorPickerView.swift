@@ -14,6 +14,10 @@ internal struct ColorPickerView: View {
     
     @State private var vm: ColorPickerVM = ColorPickerVM()
     
+    @State private var savedColors: [Color] = []
+    
+    let adaptiveColumns: [GridItem] = [GridItem(.adaptive(minimum: 50))]
+    
     @Binding var color: Color
     
     var buttonBackgroundColor: Color {
@@ -411,6 +415,40 @@ internal struct ColorPickerView: View {
                             }
                         }
                     }
+                    
+                    VStack {
+                        LazyVGrid(columns: adaptiveColumns, spacing: 25.0) {
+                            ForEach(savedColors, id: \.self) { savedColor in
+                                Circle()
+                                    .fill(savedColor)
+                                    .frame(width: 30, height: 30)
+                                    .onTapGesture {
+                                        withAnimation(.spring(duration: 0.3)) {
+                                            color = savedColor
+                                            vm.setInputs(color: &color)
+                                            vm.setInitialPickerCursor(color: &color)
+                                            vm.setInitialSliderCursors(color: &color)
+                                        }
+                                    }
+                            }
+                            
+                            Button(action: {
+                                Haptics.tap()
+                                
+                                if !(savedColors.count <= 15) { return }
+                                
+                                if savedColors.contains(color) { return }
+                                withAnimation(.spring(duration: 0.3)) {
+                                    addNewColor()
+                                }
+                            }) {
+                                Image(systemName: "plus")
+                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 15)
                 }
             }
             .padding()
@@ -428,6 +466,10 @@ internal struct ColorPickerView: View {
         .onChange(of: vm.colorModel) {
             vm.setInputs(color: &color)
         }
+    }
+    
+    func addNewColor() {
+        savedColors.append(color)
     }
 }
 
