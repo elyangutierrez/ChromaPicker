@@ -14,6 +14,10 @@ internal struct ColorPickerView: View {
     
     @State private var vm: ColorPickerVM = ColorPickerVM()
     
+    @State private var colorStore: ColorStore = ColorStore.shared
+    
+    let adaptiveColumns: [GridItem] = [GridItem(.adaptive(minimum: 50))]
+    
     @Binding var color: Color
     
     var buttonBackgroundColor: Color {
@@ -24,9 +28,8 @@ internal struct ColorPickerView: View {
         ScrollView(.vertical) {
             
             VStack(spacing: 15.0) {
-                
+
                 HStack {
-                    
                     HStack(spacing: 10.0) {
                         Button(action: {
                             Haptics.tap()
@@ -75,9 +78,6 @@ internal struct ColorPickerView: View {
                             .gesture(
                                 DragGesture(minimumDistance: 0.0)
                                     .onChanged { newValue in
-                                        
-//                                        vm.setGridIntensity(isMoving: true)
-                                        
                                         if !vm.hasTappedCursor {
                                             vm.hasTappedCursor = true
                                             Haptics.tap()
@@ -87,9 +87,6 @@ internal struct ColorPickerView: View {
                                         vm.picker(location: newValue.location, color: &color)
                                     }
                                     .onEnded { _ in
-                                        
-//                                        vm.setGridIntensity(isMoving: false)
-                                        
                                         vm.hasTappedCursor = false
                                         vm.setScaleDown(type: .color)
                                     }
@@ -407,10 +404,40 @@ internal struct ColorPickerView: View {
                                             }
                                         }
                                     }
-                                    
                             }
                         }
                     }
+                    
+                    VStack {
+                        LazyVGrid(columns: adaptiveColumns, spacing: 25.0) {
+                            
+                            Button(action: {
+                                Haptics.tap()
+                                withAnimation(.spring(duration: 0.3)) {
+                                    colorStore.addColor(color: color)
+                                }
+                            }) {
+                                Image(systemName: "plus")
+                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                            }
+                            
+                            ForEach(colorStore.savedColors, id: \.self) { savedColor in
+                                Circle()
+                                    .fill(savedColor)
+                                    .frame(width: 35, height: 35)
+                                    .onTapGesture {
+                                        withAnimation(.spring(duration: 0.3)) {
+                                            color = savedColor
+                                            vm.setInputs(color: &color)
+                                            vm.setInitialPickerCursor(color: &color)
+                                            vm.setInitialSliderCursors(color: &color)
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 15)
                 }
             }
             .padding()

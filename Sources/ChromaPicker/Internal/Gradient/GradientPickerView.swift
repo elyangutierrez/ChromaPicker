@@ -169,6 +169,7 @@ struct GradientPickerView: View {
                     }
                 )
                 ColorPickerView(color: colorBinding)
+                    .presentationDetents([.fraction(0.9)])
             }
         }
         
