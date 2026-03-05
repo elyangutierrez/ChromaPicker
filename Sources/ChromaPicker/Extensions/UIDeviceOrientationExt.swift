@@ -2,19 +2,15 @@
 //  File.swift
 //  ChromaPicker
 //
-//  Created by Elyan Gutierrez on 2/28/26.
+//  Created by Elyan Gutierrez on 3/4/26.
 //
 
 import Foundation
 import UIKit
 
-internal struct Util {
-    static func clamp<T: Comparable>(_ value: T, min minimum: T, max maximum: T) -> T {
-        return max(minimum, min(value, maximum))
-    }
-    
+extension UIDeviceOrientation {
     @MainActor
-    static func getDeviceOrientation() -> UIDeviceOrientation {
+    func getDeviceOrientation() -> UIDeviceOrientation {
         var orientation = UIDevice.current.orientation
         // Get the interface orientation incase the UIDevice Orientation doesn't exist.
         let interfaceOrientation: UIInterfaceOrientation?

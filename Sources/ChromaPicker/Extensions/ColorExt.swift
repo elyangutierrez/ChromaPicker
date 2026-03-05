@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Color: @MainActor ChromaSelection {
-    @MainActor public func makePickerView(_ binding: Binding<Color>) -> some View {
+    public func makePickerView(_ binding: Binding<Color>) -> some View {
         ColorPickerView(color: binding)
     }
     

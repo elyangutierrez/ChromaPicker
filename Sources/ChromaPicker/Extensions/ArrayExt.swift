@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-extension Array: ChromaSelection where Element == Gradient.Stop {
+extension Array: @MainActor ChromaSelection where Element == Gradient.Stop {
     public func makePickerView(_ binding: Binding<Array<Gradient.Stop>>) -> some View {
         GradientPickerView(stops: binding)
     }
