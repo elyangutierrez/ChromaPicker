@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-internal extension Image {
+extension Image {
     func pickerButtonStyle(colorScheme: ColorScheme, scale: CGFloat) -> some View {
         self
             .resizable()

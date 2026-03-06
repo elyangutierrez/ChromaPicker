@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-internal extension UIColor {
+extension UIColor {
     func toHexString(includeAlpha: Bool = false) -> String? {
             
             guard let components = self.cgColor.components else {

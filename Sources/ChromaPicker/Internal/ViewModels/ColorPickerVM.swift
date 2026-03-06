@@ -14,8 +14,6 @@ class ColorPickerVM {
     var value: Double = 1.0
     var alpha: Double = 1.0;
     var pickerCursor: CGPoint = .zero
-    var valueCursor: CGPoint = .zero
-    var alphaCursor: CGPoint = .zero
     var pickerSize: CGSize = .zero
     var valueSize: CGSize = .zero
     var alphaSize: CGSize = .zero
@@ -37,6 +35,8 @@ class ColorPickerVM {
     var textboxTwo: Double = 0.0
     var textboxThree: Double = 0.0
     var alphaTextbox: Double = 100.0
+    
+    var colorStore: ColorStore = ColorStore.shared
     
     let HORIZONTAL_INSET_VALUE = 0.04
     let PICKER_MAX_SCALE = 1.2
@@ -147,7 +147,7 @@ class ColorPickerVM {
         }
         
         setInitialPickerCursor(color: &color)
-        setInitialSliderCursors(color: &color)
+//        setInitialSliderCursors(color: &color)
     }
     
     func setInputs(color: inout Color) {
@@ -250,24 +250,21 @@ class ColorPickerVM {
         pickerCursor = CGPoint(x: x, y: y)
     }
     
-    func setInitialSliderCursors(color: inout Color) {
-        
-        let (_,_,v,a) = colorToHsv(color: color)
-        
-        value = v
-        alpha = a
-        
-        let horizontalInset = valueSize.width * HORIZONTAL_INSET_VALUE
-        
-        let usableWidth = valueSize.width - (horizontalInset * 2.0)
-        
-        let valueCursorX = horizontalInset + (usableWidth * v)
-        let alphaCursorX = horizontalInset + (usableWidth * a)
-        let cursorY = valueSize.height / 2.0
-        
-        valueCursor = CGPoint(x: valueCursorX, y: cursorY)
-        alphaCursor = CGPoint(x: alphaCursorX, y: cursorY)
-    }
+//    func setInitialSliderCursors(color: inout Color) {
+//        
+//        let (_,_,v,a) = colorToHsv(color: color)
+//        
+//        value = v
+//        alpha = a
+//        
+//        let horizontalInset = valueSize.width * HORIZONTAL_INSET_VALUE
+//        
+//        let usableWidth = valueSize.width - (horizontalInset * 2.0)
+//        
+//        let valueCursorX = horizontalInset + (usableWidth * v)
+//        let alphaCursorX = horizontalInset + (usableWidth * a)
+//        let cursorY = valueSize.height / 2.0
+//    }
     
     func picker(location: CGPoint, color: inout Color) {
 
@@ -302,13 +299,6 @@ class ColorPickerVM {
         case .value:
             let normalizedX = location.x / valueSize.width
             let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
-            
-            let horizontalInset = valueSize.width * HORIZONTAL_INSET_VALUE
-            let usableWidth = valueSize.width - (horizontalInset * 2.0)
-            let cursorX = horizontalInset + (usableWidth * clampedX)
-            let cursorY = valueSize.height / 2.0
-            
-            valueCursor = CGPoint(x: cursorX, y: cursorY)
             value = clampedX
             
             let (h,s,_,_) = colorToHsv(color: color)
@@ -317,14 +307,6 @@ class ColorPickerVM {
         case .alpha:
             let normalizedX = location.x / alphaSize.width
             let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
-            
-            let horizontalInset = alphaSize.width * HORIZONTAL_INSET_VALUE
-            let usableWidth = alphaSize.width - (horizontalInset * 2.0)
-            let cursorX = horizontalInset + (usableWidth * clampedX)
-            let cursorY = alphaSize.height / 2.0
-            
-           
-            alphaCursor = CGPoint(x: cursorX, y: cursorY)
             alpha = clampedX
             
             let (h,s,_,_) = colorToHsv(color: color)
@@ -371,7 +353,6 @@ class ColorPickerVM {
         
         setInputs(color: &color)
         setInitialPickerCursor(color: &color)
-        setInitialSliderCursors(color: &color)
     }
     
     func reset(color: inout Color) {
@@ -383,6 +364,5 @@ class ColorPickerVM {
         
         setInputs(color: &color)
         setInitialPickerCursor(color: &color)
-        setInitialSliderCursors(color: &color)
     }
 }

@@ -23,98 +23,96 @@ struct GradientPickerView: View {
     }
     
     var body: some View {
-        VStack {
-            AdaptiveLayout(
-                portrait: {
-                    ScrollView(.vertical) {
-                        VStack(spacing: 15.0) {
-                            VStack {
-                                GradientButtonHeaderView(vm: vm)
-                            }
-                            
-                            Spacer()
-                                .frame(height: 25)
-                            
-                            VStack {
-                                GradientSliderBar(editableStops: $vm.editableStops, selectedId: $vm.selectedId)
-                                    .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
-                                    .padding(.horizontal)
-                            }
-                            
-                            Spacer()
-                                .frame(height: 25)
-                            
-                            VStack {
-                                HStack {
-                                    Text("Stops")
-                                        .font(.title2.bold())
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: {
-                                        Haptics.tap()
-                                        
-                                        withAnimation(.spring(duration: 0.3)) {
-                                            vm.addStop()
-                                        }
-                                    }) {
-                                        Image(systemName: "plus")
-                                            .pickerButtonStyle(colorScheme: colorScheme, scale: 0.6)
-                                    }
-                                }
-                                
-                                VStack(spacing: 20) {
-                                    GradientStopsView(vm: vm)
-                                }
-                            }
-                        }
-                        .padding()
-                    }
-                },
-                landscape: {
-                    VStack(spacing: 25.0) {
+        AdaptiveLayout(
+            portrait: {
+                ScrollView(.vertical) {
+                    VStack(spacing: 15.0) {
                         VStack {
                             GradientButtonHeaderView(vm: vm)
                         }
                         
-                        HStack(spacing: 35.0) {
-                            VStack {
-                                GradientSliderBar(editableStops: $vm.editableStops, selectedId: $vm.selectedId)
-                                    .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
-                                    .padding(.horizontal)
+                        Spacer()
+                            .frame(height: 25)
+                        
+                        VStack {
+                            GradientSliderBar(editableStops: $vm.editableStops, selectedId: $vm.selectedId)
+                                .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
+                                .padding(.horizontal)
+                        }
+                        
+                        Spacer()
+                            .frame(height: 25)
+                        
+                        VStack {
+                            HStack {
+                                Text("Stops")
+                                    .font(.title2.bold())
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    Haptics.tap()
+                                    
+                                    withAnimation(.spring(duration: 0.3)) {
+                                        vm.addStop()
+                                    }
+                                }) {
+                                    Image(systemName: "plus")
+                                        .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                                }
                             }
                             
-                            VStack {
-                                HStack {
-                                    Text("Stops")
-                                        .font(.title2.bold())
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: {
-                                        Haptics.tap()
-                                        
-                                        withAnimation(.spring(duration: 0.3)) {
-                                            vm.addStop()
-                                        }
-                                    }) {
-                                        Image(systemName: "plus")
-                                            .pickerButtonStyle(colorScheme: colorScheme, scale: 0.6)
-                                    }
-                                }
-                                
-                                ScrollView {
-                                    VStack(spacing: 20) {
-                                        GradientStopsView(vm: vm)
-                                    }
-                                }
+                            VStack(spacing: 20) {
+                                GradientStopsView(vm: vm)
                             }
                         }
                     }
                     .padding()
                 }
-            )
-        }
+            },
+            landscape: {
+                VStack(spacing: 25.0) {
+                    VStack {
+                        GradientButtonHeaderView(vm: vm)
+                    }
+                    
+                    HStack(spacing: 35.0) {
+                        VStack {
+                            GradientSliderBar(editableStops: $vm.editableStops, selectedId: $vm.selectedId)
+                                .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
+                                .padding(.horizontal)
+                        }
+                        
+                        VStack {
+                            HStack {
+                                Text("Stops")
+                                    .font(.title2.bold())
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    Haptics.tap()
+                                    
+                                    withAnimation(.spring(duration: 0.3)) {
+                                        vm.addStop()
+                                    }
+                                }) {
+                                    Image(systemName: "plus")
+                                        .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                                }
+                            }
+                            
+                            ScrollView {
+                                VStack(spacing: 20) {
+                                    GradientStopsView(vm: vm)
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding()
+            }
+        )
         .onAppear {
             vm.setEditableStops(stops: stops)
         }
