@@ -7,20 +7,14 @@
 
 import SwiftUI
 
-struct GradientPickerView: View {
+internal struct GradientPickerView: View {
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    @State private var isOrientationLocked: Bool = true
-    @State private var editableStops: [DraggableStop] = []
-    @State private var selectedStop: Gradient.Stop?
-    @State private var selectedIndex: Int?
-    @State private var selectedId: UUID?
-    @State private var locationInput: Double?
-    @State private var hexInput: String?
-    @State private var alphaInput: Double?
-    @State private var isShowingSheet: Bool = false
+    @State private var vm: GradientPickerVM = GradientPickerVM()
     
     @Binding var stops: [Gradient.Stop]
     
@@ -29,125 +23,101 @@ struct GradientPickerView: View {
     }
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack(spacing: 15.0) {
-                VStack {
-                    HStack(spacing: 10.0) {
-                        Button(action: {
-                            Haptics.tap()
-                            withAnimation(.spring(duration: 0.3)) {
-                                reset()
-                            }
-                        }) {
-                            ZStack {
-                                Image(systemName: "arrow.trianglehead.2.counterclockwise.rotate.90")
-                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.7)
-                            }
-                        }
-                        
-                        Button(action: {
-                            Haptics.tap()
-                            withAnimation(.spring(duration: 0.3)) {
-                                isOrientationLocked.toggle()
-                            }
-                        }) {
-                            ZStack {
-                                Image(systemName: isOrientationLocked ? "lock.fill" : "lock.open.fill")
-                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
-                                    .contentTransition(.symbolEffect(.replace))
-                            }
+        AdaptiveLayout(
+            portrait: {
+                ScrollView(.vertical) {
+                    VStack(spacing: 15.0) {
+                        VStack {
+                            GradientButtonHeaderView(vm: vm)
                         }
                         
                         Spacer()
+                            .frame(height: 25)
                         
-                        Button(action: {
-                            Haptics.tap()
-                            dismiss()
-                        }) {
-                            ZStack {
-                                Image(systemName: "xmark")
-                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                        VStack {
+                            GradientSliderBar(editableStops: $vm.editableStops, selectedId: $vm.selectedId)
+                                .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
+                                .padding(.horizontal)
+                        }
+                        
+                        Spacer()
+                            .frame(height: 25)
+                        
+                        VStack {
+                            HStack {
+                                Text("Stops")
+                                    .font(.title2.bold())
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    Haptics.tap()
+                                    
+                                    withAnimation(.spring(duration: 0.3)) {
+                                        vm.addStop()
+                                    }
+                                }) {
+                                    Image(systemName: "plus")
+                                        .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                                }
+                            }
+                            
+                            VStack(spacing: 20) {
+                                GradientStopsView(vm: vm)
                             }
                         }
                     }
+                    .padding()
                 }
-                
-                Spacer()
-                    .frame(height: 25)
-                
-                VStack {
-                    GradientSliderBar(editableStops: $editableStops, selectedId: $selectedId)
-                        .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
-                }
-                
-                Spacer()
-                    .frame(height: 25)
-                
-                VStack(spacing: 20) {
-                    HStack {
-                        Text("Stops")
-                            .font(.title2.bold())
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            Haptics.tap()
-                            
-                            withAnimation(.spring(duration: 0.3)) {
-                                addStop()
-                            }
-                        }) {
-                            ZStack {
-                                Image(systemName: "plus")
-                                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
-                            }
-                        }
+            },
+            landscape: {
+                VStack(spacing: 25.0) {
+                    VStack {
+                        GradientButtonHeaderView(vm: vm)
                     }
                     
-                    VStack(spacing: 15.0) {
-                        // Iterate over the bindings of our new editable wrapper array
-                        ForEach($editableStops) { $item in
-                            GradientStopRow(
-                                stop: $item.stop,
-                                onSelect: {
+                    HStack(spacing: 35.0) {
+                        VStack {
+                            GradientSliderBar(editableStops: $vm.editableStops, selectedId: $vm.selectedId)
+                                .frame(maxWidth: .infinity, minHeight: 55, maxHeight: 55)
+                                .padding(.horizontal)
+                        }
+                        
+                        VStack {
+                            HStack {
+                                Text("Stops")
+                                    .font(.title2.bold())
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    Haptics.tap()
                                     
                                     withAnimation(.spring(duration: 0.3)) {
-                                        selectedId = item.id
+                                        vm.addStop()
                                     }
-                                    
-                                    if let index = editableStops.firstIndex(of: item) {
-                                        selectedIndex = index
-                                    }
-                                },
-                                onRemove: {
-                                    withAnimation(.spring(duration: 0.3)) {
-                                       
-                                        removeStop(id: item.id)
-                                    }
+                                }) {
+                                    Image(systemName: "plus")
+                                        .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
                                 }
-                            )
-                           
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5.0)
-                                    .stroke(selectedId == item.id ? Color.blue : Color.clear, lineWidth: 2.0)
-                            )
-                            .onTapGesture {
-                               
-                                withAnimation(.spring(duration: 0.3)) {
-                                    selectedId = item.id
+                            }
+                            
+                            ScrollView {
+                                VStack(spacing: 20) {
+                                    GradientStopsView(vm: vm)
                                 }
                             }
                         }
                     }
                 }
+                .padding()
             }
-            .padding()
-        }
+        )
         .onAppear {
-            setEditableStops()
+            vm.setEditableStops(stops: stops)
         }
-        .onChange(of: editableStops) { _, newEditableStops in
-            editableStops.sort()
+        .onChange(of: vm.editableStops) { _, newEditableStops in
+            vm.editableStops.sort()
             stops = newEditableStops.map { $0.stop }.sorted { $0.location < $1.location }
         }
         .scrollIndicators(.hidden)
@@ -156,102 +126,22 @@ struct GradientPickerView: View {
                 .frame(height: 30)
         }
         .sheet(isPresented: Binding(
-            get: { selectedIndex != nil },
-            set: { if !$0 { selectedIndex = nil } }
+            get: { vm.selectedIndex != nil },
+            set: { if !$0 { vm.selectedIndex = nil } }
         ), onDismiss: {
-            selectedIndex = nil
+            vm.selectedIndex = nil
         }) {
-            if let index = selectedIndex {
+            if let index = vm.selectedIndex {
                 let colorBinding = Binding<Color>(
-                    get: { editableStops[index].stop.color },
+                    get: { vm.editableStops[index].stop.color },
                     set: {
-                        editableStops[index].stop.color = $0
+                        vm.editableStops[index].stop.color = $0
                     }
                 )
                 ColorPickerView(color: colorBinding)
                     .presentationDetents([.fraction(0.9)])
             }
         }
-        
-    }
-    
-    func setEditableStops() {
-        editableStops = stops.map { DraggableStop(stop: $0) }
-        if let first = editableStops.first { selectedId = first.id }
-    }
-    
-    func updateStopLocations() {
-        if editableStops.isEmpty { return }
-        
-        let size = editableStops.count
-        
-        if size == 1 {
-            editableStops[0].stop.location = 0.0
-            return
-        }
-        
-        let valPerStop = 1.0 / Double(size - 1)
-        
-        for index in 0..<size {
-            let stopLoc = valPerStop * Double(index)
-            editableStops[index].stop.location = Util.clamp(stopLoc, min: 0.0, max: 1.0)
-        }
-    }
-    
-    func addStop() {
-        
-        let rRed = Double.random(in: 0.0...1.0)
-        let rGre = Double.random(in: 0.0...1.0)
-        let rBlu = Double.random(in: 0.0...1.0)
-        
-        let rColor = Color(red: rRed, green: rGre, blue: rBlu)
-        
-        let newStop = Gradient.Stop(color: rColor, location: 1.0)
-        
-        let newDraggableStop = DraggableStop(stop: newStop)
-        
-        editableStops.append(newDraggableStop)
-        
-        if !isOrientationLocked {
-            updateStopLocations()
-        }
-        
-        selectedId = newDraggableStop.id
-    }
-    
-    func removeStop(id: UUID) {
-        guard editableStops.count > 1 else { return }
-        
-        if let index = editableStops.firstIndex(where: { $0.id == id }) {
-            editableStops.remove(at: index)
-            updateStopLocations()
-            
-            if selectedId == id {
-                selectedId = nil
-            }
-        }
-    }
-    
-    func reset() {
-        
-        guard !editableStops.isEmpty else { return }
-        
-        editableStops = []
-        
-        let newStops = [
-            DraggableStop(stop: .init(color: .white, location: 0.0)),
-            DraggableStop(stop: .init(color: .black, location: 1.0))
-        ]
-        
-        editableStops = newStops
-        
-        if !editableStops.isEmpty {
-            let first = editableStops.first!
-            
-            selectedId = first.id
-        }
-        
-        updateStopLocations()
     }
 }
 

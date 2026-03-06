@@ -19,7 +19,7 @@ final internal class ColorStore {
     
     func addColor(color: Color) {
         guard !savedColors.contains(color) else { return }
-        guard savedColors.count < 10 else { return }
+        guard savedColors.count < 15 else { return }
         
         savedColors.append(color)
     }

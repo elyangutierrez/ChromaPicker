@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct StopCursorView: View {
+internal struct StopCursorView: View {
     
     @Environment(\.colorScheme) var colorScheme
     

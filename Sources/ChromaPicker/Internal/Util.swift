@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 internal struct Util {
     static func clamp<T: Comparable>(_ value: T, min minimum: T, max maximum: T) -> T {
