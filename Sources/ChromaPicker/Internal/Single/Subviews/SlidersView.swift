@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SlidersView: View {
+internal struct SlidersView: View {
     
     @Environment(\.colorScheme) var colorScheme
     

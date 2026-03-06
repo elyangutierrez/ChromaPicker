@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CircularHuePickerView: View {
+internal struct CircularHuePickerView: View {
     
     @Environment(\.colorScheme) var colorScheme
     

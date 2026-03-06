@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SingleButtonHeaderView: View {
+internal struct SingleButtonHeaderView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss

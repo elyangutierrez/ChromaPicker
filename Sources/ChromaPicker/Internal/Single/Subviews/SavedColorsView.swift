@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SavedColorsView: View {
+internal struct SavedColorsView: View {
     
     @Environment(\.colorScheme) var colorScheme
     

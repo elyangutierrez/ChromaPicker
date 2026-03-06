@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GradientButtonHeaderView: View {
+internal struct GradientButtonHeaderView: View {
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme

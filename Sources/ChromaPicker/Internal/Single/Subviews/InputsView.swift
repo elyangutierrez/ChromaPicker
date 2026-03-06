@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InputsView: View {
+internal struct InputsView: View {
     
     @Environment(\.colorScheme) var colorScheme
     

@@ -10,7 +10,7 @@ import SwiftUI
 
 @Observable
 @MainActor
-class ColorPickerVM {
+final internal class ColorPickerVM {
     var value: Double = 1.0
     var alpha: Double = 1.0;
     var pickerCursor: CGPoint = .zero

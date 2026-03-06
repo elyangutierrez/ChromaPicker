@@ -7,32 +7,13 @@
 
 import SwiftUI
 
-struct GradientStopsView: View {
+internal struct GradientStopsView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
     @Bindable var vm: GradientPickerVM
     
     var body: some View {
-//        HStack {
-//            Text("Stops")
-//                .font(.title2.bold())
-//            
-//            Spacer()
-//            
-//            Button(action: {
-//                Haptics.tap()
-//                
-//                withAnimation(.spring(duration: 0.3)) {
-//                    vm.addStop()
-//                }
-//            }) {
-//                ZStack {
-//                    Image(systemName: "plus")
-//                        .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
-//                }
-//            }
-//        }
         
         VStack(spacing: 15.0) {
             // Iterate over the bindings of our new editable wrapper array

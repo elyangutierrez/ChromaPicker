@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-internal final class Haptics {
+final internal class Haptics {
     
     @MainActor
     static func tap(style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) {

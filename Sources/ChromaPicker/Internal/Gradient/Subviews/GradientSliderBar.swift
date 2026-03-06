@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GradientSliderBar: View {
+internal struct GradientSliderBar: View {
     
     @State private var selectedItem: DraggableStop?
     @State private var currentCursor: StopCursorView?

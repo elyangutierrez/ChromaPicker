@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GradientPickerView: View {
+internal struct GradientPickerView: View {
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
