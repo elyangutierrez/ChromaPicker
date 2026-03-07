@@ -35,8 +35,15 @@ internal struct CircularHuePickerView: View {
                             
                             vm.setScaleUp(type: .color)
                             vm.picker(location: newValue.location, color: &color)
+                            
+                            withAnimation(.spring(duration: 0.3)) {
+                                vm.isStationary = false
+                            }
                         }
                         .onEnded { _ in
+                            withAnimation(.spring(duration: 0.3)) {
+                                vm.isStationary = true
+                            }
                             vm.hasTappedCursor = false
                             vm.setScaleDown(type: .color)
                         }
@@ -48,7 +55,7 @@ internal struct CircularHuePickerView: View {
                     vm.setInitialPickerCursor(color: &color)
                 }
             
-            GridPad(cursor: vm.pickerCursor, dragIntensity: vm.gridIntesity, currentColor: color)
+            GridPad(cursor: vm.pickerCursor, dragIntensity: vm.gridIntensity, isStationary: vm.isStationary, currentColor: color)
             
             Circle()
                 .colorCircle(color: color, size1: 28, size2: 16, colorScheme: colorScheme)

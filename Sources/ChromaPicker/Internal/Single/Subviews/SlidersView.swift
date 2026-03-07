@@ -85,7 +85,6 @@ internal struct SlidersView: View {
                     .gesture(
                         DragGesture(minimumDistance: 0.0)
                             .onChanged { newValue in
-                                
                                 if !vm.hasTappedCursor {
                                     vm.hasTappedCursor = true
                                     Haptics.tap()

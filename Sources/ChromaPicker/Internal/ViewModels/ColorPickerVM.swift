@@ -26,7 +26,13 @@ final internal class ColorPickerVM {
     var alphaScaleTask: Task<Void, Never>?
     
     var hasTappedCursor: Bool = false
-    var gridIntesity: CGFloat = 0.0
+    var gridIntensity: CGFloat = 0.0
+    var isStationary: Bool = true
+    
+    var isAtLeftmostValBoundary: Bool = false
+    var isAtRightmostValBoundary: Bool = false
+    var isAtLeftmostAlpBoundary: Bool = false
+    var isAtRightmostAlpBoundary: Bool = false
     
     var colorModel: ColorModel = .hsv
     
@@ -49,7 +55,7 @@ final internal class ColorPickerVM {
             pickerScaleTask?.cancel()
             withAnimation(.spring(duration: 0.3)) {
                 pickerScale = PICKER_MAX_SCALE
-                gridIntesity = 1.0
+                gridIntensity = 1.0
             }
         case .value:
             valueScaleTask?.cancel()
@@ -69,7 +75,7 @@ final internal class ColorPickerVM {
             withAnimation(.spring(duration: 0.3)) {
                 switch type {
                 case .color:
-                    gridIntesity = 0.0
+                    gridIntensity = 0.0
                     self.pickerScale = MIN_SCALE
                 case .value:
                     self.valueScale = MIN_SCALE
@@ -147,7 +153,6 @@ final internal class ColorPickerVM {
         }
         
         setInitialPickerCursor(color: &color)
-//        setInitialSliderCursors(color: &color)
     }
     
     func setInputs(color: inout Color) {
@@ -292,6 +297,20 @@ final internal class ColorPickerVM {
             let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
             value = clampedX
             
+            if !isAtLeftmostValBoundary && value == 0.0 {
+                isAtLeftmostValBoundary = true
+                Haptics.boundary()
+            } else if isAtLeftmostValBoundary && value != 0.0 {
+                isAtLeftmostValBoundary = false
+            }
+            
+            if !isAtRightmostValBoundary && value == 1.0 {
+                isAtRightmostValBoundary = true
+                Haptics.boundary()
+            } else if isAtRightmostValBoundary && value != 1.0 {
+                isAtRightmostValBoundary = false
+            }
+            
             let (h,s,_,_) = colorToHsv(color: color)
             hsvToRgb(h: h, s: s, v: value, a: alpha, color: &color)
             setInputs(color: &color)
@@ -303,6 +322,20 @@ final internal class ColorPickerVM {
             let normalizedX = adjustedX / usableWidth
             let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
             alpha = clampedX
+            
+            if !isAtLeftmostAlpBoundary && alpha == 0.0 {
+                isAtLeftmostAlpBoundary = true
+                Haptics.boundary()
+            } else if isAtLeftmostAlpBoundary && alpha != 0.0 {
+                isAtLeftmostAlpBoundary = false
+            }
+            
+            if !isAtRightmostAlpBoundary && alpha == 1.0 {
+                isAtRightmostAlpBoundary = true
+                Haptics.boundary()
+            } else if isAtRightmostAlpBoundary && alpha != 1.0 {
+                isAtRightmostAlpBoundary = false
+            }
             
             let (h,s,_,_) = colorToHsv(color: color)
             hsvToRgb(h: h, s: s, v: value, a: alpha, color: &color)
@@ -338,6 +371,19 @@ final internal class ColorPickerVM {
         color = Color(UIColor(red: red, green: green, blue: blue, alpha: alpha))
     }
     
+    func resetBoundaries(type: PickerType) {
+        switch type {
+        case .value:
+            isAtLeftmostValBoundary = false
+            isAtRightmostValBoundary = false
+        case .alpha:
+            isAtLeftmostAlpBoundary = false
+            isAtRightmostAlpBoundary = false
+        default:
+            return
+        }
+    }
+    
     func shuffle(color: inout Color) {
         let randomRed = Double.random(in: 0.0...1.0)
         let randomGreen = Double.random(in: 0.0...1.0)
@@ -349,6 +395,7 @@ final internal class ColorPickerVM {
         setInputs(color: &color)
         setInitialPickerCursor(color: &color)
     }
+    
     
     func reset(color: inout Color) {
         let white = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
