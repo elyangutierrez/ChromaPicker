@@ -35,13 +35,7 @@ internal struct SlidersView: View {
                             let xPos = cursorRadius + (usableWidth * vm.value)
                             
                             Circle()
-                                .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
-                                .frame(width: cursorRadius * 2, height: cursorRadius * 2)
-                                .overlay {
-                                    Circle()
-                                        .fill(color)
-                                        .frame(width: 18, height: 18)
-                                }
+                                .colorCircle(color: color, size1: cursorRadius * 2.0, size2: 18, colorScheme: colorScheme)
                                 .position(x: xPos, y: geo.size.height / 2.0)
                                 .scaleEffect(vm.valueScale)
                         }
@@ -83,13 +77,7 @@ internal struct SlidersView: View {
                             let xPos = cursorRadius + (usableWidth * vm.alpha)
                             
                             Circle()
-                                .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
-                                .frame(width: cursorRadius * 2, height: cursorRadius * 2)
-                                .overlay {
-                                    Circle()
-                                        .fill(color)
-                                        .frame(width: 18, height: 18)
-                                }
+                                .colorCircle(color: color, size1: cursorRadius * 2.0, size2: 18, colorScheme: colorScheme)
                                 .position(x: xPos, y: geo.size.height / 2.0)
                                 .scaleEffect(vm.alphaScale)
                         }

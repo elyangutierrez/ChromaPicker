@@ -31,8 +31,7 @@ internal struct SavedColorsView: View {
             
             ForEach(vm.colorStore.savedColors, id: \.self) { savedColor in
                 Circle()
-                    .fill(savedColor)
-                    .frame(width: 35, height: 35)
+                    .colorCircle(color: savedColor, size1: 30, size2: 18, colorScheme: colorScheme)
                     .onTapGesture {
                         Haptics.tap()
                         withAnimation(.spring(duration: 0.3)) {

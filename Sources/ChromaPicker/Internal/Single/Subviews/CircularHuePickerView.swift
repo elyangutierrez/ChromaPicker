@@ -51,13 +51,7 @@ internal struct CircularHuePickerView: View {
             GridPad(cursor: vm.pickerCursor, dragIntensity: vm.gridIntesity, currentColor: color)
             
             Circle()
-                .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
-                .frame(width: 28, height: 28)
-                .overlay {
-                    Circle()
-                        .fill(color)
-                        .frame(width: 16, height: 16)
-                }
+                .colorCircle(color: color, size1: 28, size2: 16, colorScheme: colorScheme)
                 .shadow(color: color.opacity(0.3), radius: 10.0)
                 .shadow(color: color.opacity(0.3), radius: 10.0)
                 .position(vm.pickerCursor)
