@@ -15,4 +15,10 @@ final internal class Haptics {
         let impact = UIImpactFeedbackGenerator(style: style)
         impact.impactOccurred()
     }
+    
+    @MainActor
+    static func boundary(style: UIImpactFeedbackGenerator.FeedbackStyle = .soft) {
+        let impact = UIImpactFeedbackGenerator(style: style)
+        impact.impactOccurred()
+    }
 }

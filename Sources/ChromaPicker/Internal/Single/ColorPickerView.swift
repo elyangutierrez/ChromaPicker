@@ -59,7 +59,7 @@ internal struct ColorPickerView: View {
                         SingleButtonHeaderView(vm: vm, color: $color)
                     }
                     
-                    HStack(spacing: 35.0) {
+                    HStack(spacing: 35.0) {  
                         VStack(spacing: 15.0) {
                             CircularHuePickerView(vm: vm, color: $color, isPortrait: false)
                         }
