@@ -34,6 +34,7 @@ internal struct SavedColorsView: View {
                     .fill(savedColor)
                     .frame(width: 35, height: 35)
                     .onTapGesture {
+                        Haptics.tap()
                         withAnimation(.spring(duration: 0.3)) {
                             color = savedColor
                             vm.setInputs(color: &color)

@@ -94,7 +94,7 @@ internal struct ColorPickerView: View {
 
 #Preview {
     
-    @Previewable @State var binding: Color = .red
+    @Previewable @State var binding: Color = .white
     
     ColorPickerView(color: $binding)
 }

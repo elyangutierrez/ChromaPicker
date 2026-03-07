@@ -16,7 +16,7 @@ internal struct CircularHuePickerView: View {
     var isPortrait: Bool
     
     var height: CGFloat {
-        return isPortrait ? 375.0 : 175.0
+        return isPortrait ? 375.0 : 215.0
     }
     
     var body: some View {
@@ -43,8 +43,9 @@ internal struct CircularHuePickerView: View {
                 )
                 .geometryReader { g in
                     vm.pickerSize = g?.size ?? .zero
-                    let center = CGPoint(x: vm.pickerSize.width / 2.0, y: vm.pickerSize.height / 2.0)
-                    vm.pickerCursor = CGPoint(x: center.x, y: center.y)
+                }
+                .onChange(of: vm.pickerSize) {
+                    vm.setInitialPickerCursor(color: &color)
                 }
             
             GridPad(cursor: vm.pickerCursor, dragIntensity: vm.gridIntesity, currentColor: color)
