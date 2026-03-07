@@ -23,14 +23,19 @@ internal struct GridPad: View {
             let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
             let maxRadius = min(size.width * 0.85, size.height * 0.85) / 2.0
             
-            // Calculate the nearest grid intersection to the cursor for the "Crosshair"
-            let nearestX = round((cursor.x - center.x) / spacing) * spacing
-            let nearestY = round((cursor.y - center.y) / spacing) * spacing
-            
-            context.blendMode = .plusLighter
-            
-            for xOffset in stride(from: -maxRadius, through: maxRadius, by: spacing) {
-                for yOffset in stride(from: -maxRadius, through: maxRadius, by: spacing) {
+            // 1. Find the largest multiple of `spacing` that fits inside `maxRadius`
+                let dotCount = floor(maxRadius / spacing)
+                let bound = dotCount * spacing // This creates a perfect boundary (e.g., exactly 135.0)
+                
+                let nearestX = round((cursor.x - center.x) / spacing) * spacing
+                let nearestY = round((cursor.y - center.y) / spacing) * spacing
+                
+                context.blendMode = .plusLighter
+                
+                // 2. Stride from `-bound` to `bound`. Because bound is a perfect multiple
+                // of spacing, this mathematically GUARANTEES it will hit exactly 0.0 in the center!
+            for xOffset in stride(from: -bound, through: bound, by: spacing) {
+                for yOffset in stride(from: -bound, through: bound, by: spacing) {
                     
                     let distanceToCenter = hypot(xOffset, yOffset)
                     
@@ -62,14 +67,20 @@ internal struct GridPad: View {
                         let baseColor = colorScheme == .light ? Color.gray : Color.white
                         let finalColor = baseColor.mix(with: currentColor, by: activeInfluence)
                         
-                        let rect = CGRect(
-                            x: dotCenter.x - (currentSize / 2.0),
-                            y: dotCenter.y - (currentSize / 2.0),
-                            width: currentSize,
-                            height: currentSize
-                        )
+                        let radius = currentSize / 2.0
                         
-                        context.fill(Path(ellipseIn: rect), with: .color(finalColor.opacity(alpha)))
+                        let circlePath = Path { path in
+                            // Origin is exactly the center, drawing outwards by the radius
+                            path.addArc(
+                                center: dotCenter,
+                                radius: radius,
+                                startAngle: .degrees(0),
+                                endAngle: .degrees(360),
+                                clockwise: true
+                            )
+                        }
+                        
+                        context.fill(circlePath, with: .color(finalColor.opacity(alpha)))
                     }
                 }
             }
