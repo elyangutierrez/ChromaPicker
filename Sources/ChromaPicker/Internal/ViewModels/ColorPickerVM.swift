@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+/**
+    Contains and manages all the logic used in the single color picker.
+ */
+
 @Observable
 @MainActor
 final internal class ColorPickerVM {
@@ -49,6 +53,12 @@ final internal class ColorPickerVM {
     let SLIDER_MAX_SCALE = 1.4
     let MIN_SCALE = 1.0
     
+    /**
+        Increases the scale effect of the given type.
+     
+        - Parameter type: Represents the `PickerType` that wants to be scaled up.
+     */
+    
     func setScaleUp(type: PickerType) {
         switch type {
         case .color:
@@ -65,6 +75,12 @@ final internal class ColorPickerVM {
             withAnimation(.spring(duration: 0.3)) { alphaScale = PICKER_MAX_SCALE }
         }
     }
+    
+    /**
+        Decreases the scale effect of the given type.
+     
+        - Parameter type: Represents the `PickerType` that wants to be scaled down.
+     */
     
     func setScaleDown(type: PickerType) {
         let task = Task {
@@ -95,22 +111,12 @@ final internal class ColorPickerVM {
         }
     }
     
-    func setScale(value: CGFloat, type: PickerType) {
-        switch type {
-        case .alpha:
-            withAnimation(.spring(duration: 0.3)) {
-                alphaScale = value
-            }
-        case .color:
-            withAnimation(.spring(duration: 0.3)) {
-                pickerScale = value
-            }
-        case .value:
-            withAnimation(.spring(duration: 0.3)) {
-                valueScale = value
-            }
-        }
-    }
+    /**
+        Creates a new `Color` from the inputs and sets the current to the new.
+        That color is then used to update the cursor of the color picker.
+    
+        - Parameter color: The current `Color` being displayed.
+     */
     
     func updateColorFromInputs(color: inout Color) {
         switch colorModel {
@@ -155,6 +161,12 @@ final internal class ColorPickerVM {
         setInitialPickerCursor(color: &color)
     }
     
+    /**
+        Sets the inputs based off of the given color using the selected color model.
+     
+        - Parameter color: The current `Color` that is being displayed.
+     */
+    
     func setInputs(color: inout Color) {
         switch colorModel {
         case .hex:
@@ -193,6 +205,12 @@ final internal class ColorPickerVM {
             alphaTextbox = (dAlp * 10).rounded() / 10.0
         }
     }
+    
+    /**
+        Sets the initial inputs based off of the given color using the selected color model.
+     
+        - Parameter color: The current `Color` that is being displayed.
+     */
     
     func setInitialInputs(color: inout Color) {
         switch colorModel {
@@ -234,6 +252,12 @@ final internal class ColorPickerVM {
             alphaTextbox = (dAlp * 10).rounded() / 10.0
         }
     }
+    
+    /**
+        Sets the initial circular hue picker cursor based off of the current color.
+     
+        - Parameter color: The current `Color` that is being displayed.
+     */
 
     func setInitialPickerCursor(color: inout Color) {
         let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
@@ -254,6 +278,16 @@ final internal class ColorPickerVM {
         
         pickerCursor = CGPoint(x: x, y: y)
     }
+    
+    /**
+        Utilizes circular hue logic to update both the cursor of the picker and
+        the current color to the new color that is created. The inputs are then updated
+        to match the new color.
+     
+        - Parameters:
+            - location: The current location of where the user finger is at on the picker.
+            - color: The current color that is being displayed.
+     */
     
     func picker(location: CGPoint, color: inout Color) {
 
@@ -282,6 +316,16 @@ final internal class ColorPickerVM {
         hsvToRgb(h: hue, s: saturation, v: value, a: alpha, color: &color)
         setInputs(color: &color)
     }
+    
+    /**
+        Updates the current slider cursor to the new location based off of the selected type. Using the updated logic,
+        the current color gets set to the new one.
+     
+        - Parameters:
+            - location: The current location of where the user finger is at on the sliider.
+            - type: The type of the slider that is being adjusted.
+            - color: The current color that is being displayed.
+     */
 
     func slider(location: CGPoint, type: PickerType, color: inout Color) {
         let cursorRadius: CGFloat = 15.0
@@ -345,6 +389,14 @@ final internal class ColorPickerVM {
         }
     }
     
+    /**
+        Returns the HSV representation of the current color given.
+     
+        - Parameter color: The current color that is being displayed.
+     
+        - Returns: The HSV representation of the given color.
+     */
+    
     func colorToHsv(color: Color) -> (h: CGFloat, s: CGFloat, v: CGFloat, a: CGFloat) {
         let uiColor = UIColor(color)
         
@@ -357,6 +409,12 @@ final internal class ColorPickerVM {
         
         return (hue, saturation, value, alpha)
     }
+    
+    /**
+        Sets the current color given to the RGB representation of it.
+     
+        - Parameter color: The current color that is being displayed
+     */
     
     func hsvToRgb(h: CGFloat, s: CGFloat, v: CGFloat, a: CGFloat, color: inout Color) {
         let hsvColor = UIColor(hue: h, saturation: s, brightness: v, alpha: a)
@@ -371,18 +429,12 @@ final internal class ColorPickerVM {
         color = Color(UIColor(red: red, green: green, blue: blue, alpha: alpha))
     }
     
-    func resetBoundaries(type: PickerType) {
-        switch type {
-        case .value:
-            isAtLeftmostValBoundary = false
-            isAtRightmostValBoundary = false
-        case .alpha:
-            isAtLeftmostAlpBoundary = false
-            isAtRightmostAlpBoundary = false
-        default:
-            return
-        }
-    }
+    /**
+        Shuffles the current color given to a new one via randomization.
+        The inputs and picker cursor are updated to the new color.
+     
+        - Parameter color: The current color that is being displayed
+     */
     
     func shuffle(color: inout Color) {
         let randomRed = Double.random(in: 0.0...1.0)
@@ -396,6 +448,12 @@ final internal class ColorPickerVM {
         setInitialPickerCursor(color: &color)
     }
     
+    /**
+        Resets the current color given to white.
+        The inputs and picker cursor are updated to the new color.
+     
+        - Parameter color: The current color that is being displayed
+     */
     
     func reset(color: inout Color) {
         let white = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
