@@ -250,22 +250,6 @@ final internal class ColorPickerVM {
         pickerCursor = CGPoint(x: x, y: y)
     }
     
-//    func setInitialSliderCursors(color: inout Color) {
-//        
-//        let (_,_,v,a) = colorToHsv(color: color)
-//        
-//        value = v
-//        alpha = a
-//        
-//        let horizontalInset = valueSize.width * HORIZONTAL_INSET_VALUE
-//        
-//        let usableWidth = valueSize.width - (horizontalInset * 2.0)
-//        
-//        let valueCursorX = horizontalInset + (usableWidth * v)
-//        let alphaCursorX = horizontalInset + (usableWidth * a)
-//        let cursorY = valueSize.height / 2.0
-//    }
-    
     func picker(location: CGPoint, color: inout Color) {
 
         let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
@@ -295,9 +279,16 @@ final internal class ColorPickerVM {
     }
 
     func slider(location: CGPoint, type: PickerType, color: inout Color) {
+        let cursorRadius: CGFloat = 15.0
+        
         switch type {
         case .value:
-            let normalizedX = location.x / valueSize.width
+            
+            let usableWidth = valueSize.width - (cursorRadius * 2)
+            
+            let adjustedX = location.x - cursorRadius
+            
+            let normalizedX = adjustedX / usableWidth
             let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
             value = clampedX
             
@@ -305,7 +296,11 @@ final internal class ColorPickerVM {
             hsvToRgb(h: h, s: s, v: value, a: alpha, color: &color)
             setInputs(color: &color)
         case .alpha:
-            let normalizedX = location.x / alphaSize.width
+            let usableWidth = alphaSize.width - (cursorRadius * 2)
+            
+            let adjustedX = location.x - cursorRadius
+            
+            let normalizedX = adjustedX / usableWidth
             let clampedX = Util.clamp(normalizedX, min: 0.0, max: 1.0)
             alpha = clampedX
             

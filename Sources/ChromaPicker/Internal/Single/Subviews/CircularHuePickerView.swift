@@ -54,8 +54,8 @@ internal struct CircularHuePickerView: View {
                 .colorCircle(color: color, size1: 28, size2: 16, colorScheme: colorScheme)
                 .shadow(color: color.opacity(0.3), radius: 10.0)
                 .shadow(color: color.opacity(0.3), radius: 10.0)
-                .position(vm.pickerCursor)
                 .scaleEffect(vm.pickerScale)
+                .position(vm.pickerCursor)
         }
     }
 }

@@ -36,8 +36,8 @@ internal struct SlidersView: View {
                             
                             Circle()
                                 .colorCircle(color: color, size1: cursorRadius * 2.0, size2: 18, colorScheme: colorScheme)
-                                .position(x: xPos, y: geo.size.height / 2.0)
                                 .scaleEffect(vm.valueScale)
+                                .position(x: xPos, y: geo.size.height / 2.0)
                         }
                     }
                     .gesture(
@@ -78,8 +78,8 @@ internal struct SlidersView: View {
                             
                             Circle()
                                 .colorCircle(color: color, size1: cursorRadius * 2.0, size2: 18, colorScheme: colorScheme)
-                                .position(x: xPos, y: geo.size.height / 2.0)
                                 .scaleEffect(vm.alphaScale)
+                                .position(x: xPos, y: geo.size.height / 2.0)
                         }
                     }
                     .gesture(
