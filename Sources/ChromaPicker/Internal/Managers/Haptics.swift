@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+/**
+    Handles any logic regarding haptics.
+ */
+
 final internal class Haptics {
     
     @MainActor
