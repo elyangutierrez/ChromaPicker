@@ -1,11 +1,15 @@
 //
-//  SwiftUIView.swift
+//  SingleButtonHeaderView.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 3/5/26.
 //
 
 import SwiftUI
+
+/**
+    Generates a view that offers more discrete functionality.
+ */
 
 internal struct SingleButtonHeaderView: View {
     

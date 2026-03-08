@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+    Generates a view of sliders that be interacted with.
+ */
+
 internal struct SlidersView: View {
     
     @Environment(\.colorScheme) var colorScheme

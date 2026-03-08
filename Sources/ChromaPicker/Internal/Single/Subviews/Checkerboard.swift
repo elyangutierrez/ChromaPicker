@@ -8,6 +8,11 @@
 import Foundation
 import SwiftUI
 
+/**
+    Generates a checkboard design that is utilized in the
+    alpha slider.
+ */
+
 internal struct Checkerboard: View {
     var color: Color
     var squareSize: CGFloat = 8.0
