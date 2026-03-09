@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+    Generates the view for the gradient picker view.
+ */
+
 internal struct GradientPickerView: View {
     
     @Environment(\.dismiss) var dismiss

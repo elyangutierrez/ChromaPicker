@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/**
+    A custom shape that serves as a draggable cursor
+    like the one used in the simple color picker.
+ */
+
 internal struct StopCursorShape: Shape {
     var cornerRadius: CGFloat = 16.0
     var tailWidth: CGFloat = 24.0

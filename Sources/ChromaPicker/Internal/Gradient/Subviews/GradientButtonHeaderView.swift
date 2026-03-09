@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+    Generates a view that offers more discrete functionality.
+ */
+
 internal struct GradientButtonHeaderView: View {
     
     @Environment(\.dismiss) var dismiss

@@ -1,11 +1,16 @@
 //
-//  SwiftUIView.swift
+//  GradientSliderBar.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 2/28/26.
 //
 
 import SwiftUI
+
+/**
+    Generates a slider bar that lets user drag stops to new
+    positions/locations on a normalized scale from 0-1.
+ */
 
 internal struct GradientSliderBar: View {
     
