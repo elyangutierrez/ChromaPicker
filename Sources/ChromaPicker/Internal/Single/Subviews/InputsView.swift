@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/**
+    Generates a view that lets users select/input different
+    values which is then reflected back into the ui.
+ */
+
 internal struct InputsView: View {
     
     @Environment(\.colorScheme) var colorScheme

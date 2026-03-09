@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+    Generates an adaptive layout with the types provided.
+ */
+
 internal struct AdaptiveLayout<Portrait: View, Landscape: View>: View {
     @ViewBuilder
     var portrait: () -> Portrait

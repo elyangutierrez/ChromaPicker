@@ -9,6 +9,17 @@ import Foundation
 import SwiftUI
 
 extension Image {
+    
+    /**
+        A custom view modifiier that setups the styling for the header buttons.
+        
+        - Parameters:
+            - colorScheme:  The devices current color system that is being used.
+            - scale: The scale that wants to be applied to the button.
+     
+        - Returns: A new button style.
+     */
+    
     func pickerButtonStyle(colorScheme: ColorScheme, scale: CGFloat) -> some View {
         self
             .resizable()

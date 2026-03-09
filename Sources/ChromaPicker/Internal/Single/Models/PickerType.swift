@@ -7,6 +7,11 @@
 
 import Foundation
 
+/**
+    Represents the picker types that the user can select from
+    when interacting with ui.
+ */
+
 internal enum PickerType: CaseIterable {
     case color
     case value

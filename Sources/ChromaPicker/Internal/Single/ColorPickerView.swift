@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+    Generates the view for the single color picker.
+ */
+
 internal struct ColorPickerView: View {
     
     @Environment(\.dismiss) var dismiss

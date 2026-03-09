@@ -1,11 +1,15 @@
 //
-//  SwiftUIView.swift
+//  GradientStopRow.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 2/28/26.
 //
 
 import SwiftUI
+
+/**
+    Represents each stop and its attributes.
+ */
 
 internal struct GradientStopRow: View {
     @Environment(\.colorScheme) var colorScheme

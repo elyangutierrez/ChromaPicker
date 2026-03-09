@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  GradientPickerVM.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 3/4/26.
@@ -7,6 +7,10 @@
 
 import Foundation
 import SwiftUI
+
+/**
+    Contains and manages all the logic used in the gradient picker.
+ */
 
 @Observable
 final internal class GradientPickerVM {
@@ -20,10 +24,21 @@ final internal class GradientPickerVM {
     var alphaInput: Double?
     var isShowingSheet: Bool = false
     
+    /**
+        Sets the editable stops to the value of the provided stops value.
+        
+        - Parameter stops: An `[Gradient.Stop]`.
+     */
+    
     func setEditableStops(stops: [Gradient.Stop]) {
         editableStops = stops.map { DraggableStop(stop: $0) }
         if let first = editableStops.first { selectedId = first.id }
     }
+    
+    /**
+        Updates the current location of each stop to match the new size
+        of the `editableStops`.
+     */
     
     func updateStopLocations() {
         if editableStops.isEmpty { return }
@@ -42,6 +57,10 @@ final internal class GradientPickerVM {
             editableStops[index].stop.location = Util.clamp(stopLoc, min: 0.0, max: 1.0)
         }
     }
+    
+    /**
+        Adds a new randomized stop to `editableStops`.
+     */
     
     func addStop() {
         
@@ -64,6 +83,12 @@ final internal class GradientPickerVM {
         selectedId = newDraggableStop.id
     }
     
+    /**
+        Removes the stop from `editableStops` with the matching `UUID`.
+     
+        - Parameter id: A `UUID` of the stop that wants to be removed.
+     */
+    
     func removeStop(id: UUID) {
         guard editableStops.count > 1 else { return }
         
@@ -76,6 +101,10 @@ final internal class GradientPickerVM {
             }
         }
     }
+    
+    /**
+        Resets  `editableStops` to a new `[DraggableStop]`.
+     */
     
     func reset() {
         

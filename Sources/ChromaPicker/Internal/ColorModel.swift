@@ -7,6 +7,10 @@
 
 import Foundation
 
+/**
+    Contains the color model that are used within the picker.
+ */
+
 internal enum ColorModel: String, CaseIterable, Comparable {
     case hex = "Hex"
     case rgb = "RGB"

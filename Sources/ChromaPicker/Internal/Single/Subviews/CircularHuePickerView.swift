@@ -1,11 +1,17 @@
 //
-//  SwiftUIView.swift
+//  CircularHuePickerView.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 3/5/26.
 //
 
 import SwiftUI
+
+/**
+    Generates a view that utilizes circular hue logic
+    which can interacted with via a draggable
+    cursor.
+ */
 
 internal struct CircularHuePickerView: View {
     

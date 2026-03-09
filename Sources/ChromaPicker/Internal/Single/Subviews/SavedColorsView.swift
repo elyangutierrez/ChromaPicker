@@ -1,11 +1,17 @@
 //
-//  SwiftUIView.swift
+//  SavedColorsView.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 3/5/26.
 //
 
 import SwiftUI
+
+/**
+    Generates a view that lets users add current colors
+    to a store that can then be used for ease of access
+    and reusability.
+ */
 
 internal struct SavedColorsView: View {
     

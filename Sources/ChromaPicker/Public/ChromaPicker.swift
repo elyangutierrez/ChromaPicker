@@ -6,8 +6,8 @@ import SwiftUI
 /// An instance that lets you select either a color or an array of stops.
 ///
 /// - Parameters:
-///     - selection: A ``binding`` to the variable which can either be a ``Color``
-///       or an ``[Gradient.Stop]``.
+///     - selection: A `binding` to the variable which can either be a `Color`
+///       or an `[Gradient.Stop]`.
 /// 
 
 public struct ChromaPicker<S: ChromaSelection>: View {

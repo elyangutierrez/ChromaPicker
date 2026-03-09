@@ -8,6 +8,11 @@
 import Foundation
 import SwiftUI
 
+/**
+    A simple wrapper over Gradient.Stop that allows for custom drag
+    gestures.
+ */
+
 internal struct DraggableStop: Equatable, Identifiable, Comparable {
     var id = UUID()
     var stop: Gradient.Stop

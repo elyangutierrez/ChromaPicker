@@ -9,6 +9,15 @@ import Foundation
 import UIKit
 
 extension UIColor {
+    
+    /**
+        Converts the `UIColor` to an `optional` hex string.
+     
+        - Parameter includeAlpha: A boolean that determines if the alpha wants to be applied.
+        
+        - Returns: An `optional` hex string.
+     */
+    
     func toHexString(includeAlpha: Bool = false) -> String? {
             
             guard let components = self.cgColor.components else {

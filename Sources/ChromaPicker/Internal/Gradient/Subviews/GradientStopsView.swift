@@ -1,11 +1,15 @@
 //
-//  SwiftUIView.swift
+//  GradientStopsView.swift
 //  ChromaPicker
 //
 //  Created by Elyan Gutierrez on 3/4/26.
 //
 
 import SwiftUI
+
+/**
+    A view that iterates over all the stops in `vm.editableStops`.
+ */
 
 internal struct GradientStopsView: View {
     

@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/**
+    Generates a grid-like circular pad that dynamically changes based off
+    of where the cursor is currently at.
+ */
+
 internal struct GridPad: View {
     
     @Environment(\.colorScheme) var colorScheme

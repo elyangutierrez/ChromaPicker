@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/**
+    A view that represents the stop cursor which is associated
+    with each `draggableStop`.
+ */
+
 internal struct StopCursorView: View {
     
     @Environment(\.colorScheme) var colorScheme
