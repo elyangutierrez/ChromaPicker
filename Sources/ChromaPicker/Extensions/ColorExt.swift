@@ -9,9 +9,24 @@ import Foundation
 import SwiftUI
 
 extension Color: @MainActor ChromaSelection {
+    
+    /**
+        Makes the view for the color picker only when selection is
+        a `Color`.
+     
+        - Parameter binding: A `Binding` to an `Color`.
+     
+        - Returns: `ColorPickerView`
+     */
+    
     public func makePickerView(_ binding: Binding<Color>) -> some View {
         ColorPickerView(color: binding)
     }
+    
+    /**
+        A custom initalizer that allows for hex parsing and
+        creates a new color from that parsing.
+     */
     
     init(hex: String) {
         let scanner = Scanner(string: hex)
