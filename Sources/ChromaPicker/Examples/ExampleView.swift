@@ -14,7 +14,7 @@ struct ExampleView: View {
         .init(color: .red, location: 0.5),
         .init(color: .green, location: 0.7)
     ]
-    @State private var color: Color = .blue
+    @State private var color: Color = .red
     @State private var currentMode = "Single"
     
     let modes = ["Single", "Stops"]

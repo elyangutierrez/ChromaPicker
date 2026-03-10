@@ -26,50 +26,73 @@ internal struct CircularHuePickerView: View {
     }
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 15.0)
-                .stroke(.gray, lineWidth: 0.5)
-                .fill(.regularMaterial)
-                .frame(maxWidth: .infinity, minHeight: height)
-                .gesture(
-                    DragGesture(minimumDistance: 0.0)
-                        .onChanged { newValue in
-                            if !vm.hasTappedCursor {
-                                vm.hasTappedCursor = true
-                                Haptics.tap()
+        RoundedRectangle(cornerRadius: 15.0)
+            .stroke(.gray, lineWidth: 0.5)
+            .fill(.regularMaterial)
+            .frame(maxWidth: .infinity, minHeight: 375)
+            .overlay {
+                GeometryReader { geo in
+                    let cursorPosition = getGridCursorPosition(size: geo.size, for: color)
+                    
+                    ZStack(alignment: .topLeading) {
+                        GridPad(
+                            cursor: cursorPosition,
+                            dragIntensity: vm.gridIntensity,
+                            currentColor: color
+                        )
+                        
+                        Circle()
+                            .fill(color.opacity(0.7).mix(with: colorScheme == .dark ? .white : .black, by: 0.3))
+                            .frame(width: 28, height: 28)
+                            .overlay {
+                                Circle()
+                                    .fill(color)
+                                    .frame(width: 16, height: 16)
                             }
-                            
-                            vm.setScaleUp(type: .color)
-                            vm.picker(location: newValue.location, color: &color)
-                            
-                            withAnimation(.spring(duration: 0.3)) {
-                                vm.isStationary = false
+                            .shadow(color: color.opacity(0.3), radius: 10.0)
+                            .shadow(color: color.opacity(0.3), radius: 10.0)
+                            .scaleEffect(vm.pickerScale)
+                            .position(cursorPosition)
+                    }
+                    .contentShape(Rectangle()) // Ensures the whole ZStack catches the drag
+                    .gesture(
+                        DragGesture(minimumDistance: 0.0)
+                            .onChanged { newValue in
+                                if !vm.hasTappedCursor {
+                                    vm.hasTappedCursor = true
+                                    Haptics.tap()
+                                }
+                                vm.setScaleUp(type: .color)
+                                // Pass geo.size directly to the gesture math!
+                                vm.picker(location: newValue.location, size: geo.size, color: &color)
                             }
-                        }
-                        .onEnded { _ in
-                            withAnimation(.spring(duration: 0.3)) {
-                                vm.isStationary = true
+                            .onEnded { _ in
+                                vm.hasTappedCursor = false
+                                vm.setScaleDown(type: .color)
                             }
-                            vm.hasTappedCursor = false
-                            vm.setScaleDown(type: .color)
-                        }
-                )
-                .geometryReader { g in
-                    vm.pickerSize = g?.size ?? .zero
+                    )
                 }
-                .onChange(of: vm.pickerSize) {
-                    vm.setInitialPickerCursor(color: &color)
-                }
-            
-            GridPad(cursor: vm.pickerCursor, dragIntensity: vm.gridIntensity, isStationary: vm.isStationary, currentColor: color)
-            
-            Circle()
-                .colorCircle(color: color, size1: 28, size2: 16, colorScheme: colorScheme)
-                .shadow(color: color.opacity(0.3), radius: 10.0)
-                .shadow(color: color.opacity(0.3), radius: 10.0)
-                .scaleEffect(vm.pickerScale)
-                .position(vm.pickerCursor)
-        }
+                .clipShape(RoundedRectangle(cornerRadius: 15.0))
+            }
+    }
+    
+    func getGridCursorPosition(size: CGSize, for color: Color) -> CGPoint {
+        // Prevent math errors if the view hasn't sized itself yet
+        guard size != .zero else { return .zero }
+        
+        let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
+        let maxRadius = min(size.width * 0.85, size.height * 0.85) / 2.0
+        
+        // Extract HSV from the current color
+        let (h, s, _, _) = vm.colorToHsv(color: color)
+        
+        let angle = h * 2.0 * .pi
+        let currentRadius = maxRadius * s
+        
+        let x = center.x + (currentRadius * cos(angle))
+        let y = center.y + (currentRadius * sin(angle))
+        
+        return CGPoint(x: x, y: y)
     }
 }
 
