@@ -43,7 +43,6 @@ internal struct SavedColorsView: View {
                         withAnimation(.spring(duration: 0.3)) {
                             color = savedColor
                             vm.setInputs(color: &color)
-                            vm.setInitialPickerCursor(color: &color)
                         }
                     }
             }

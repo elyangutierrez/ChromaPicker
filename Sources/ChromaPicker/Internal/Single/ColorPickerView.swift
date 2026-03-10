@@ -87,7 +87,6 @@ internal struct ColorPickerView: View {
                 .frame(height: 30)
         }
         .onAppear {
-            vm.setInitialPickerCursor(color: &color)
             vm.setInitialInputs(color: &color)
         }
         .onChange(of: vm.colorModel) {

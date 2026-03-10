@@ -17,8 +17,6 @@ import SwiftUI
 final internal class ColorPickerVM {
     var value: Double = 1.0
     var alpha: Double = 1.0;
-    var pickerCursor: CGPoint = .zero
-    var pickerSize: CGSize = .zero
     var valueSize: CGSize = .zero
     var alphaSize: CGSize = .zero
     var pickerScale: CGFloat = 1.0
@@ -31,7 +29,6 @@ final internal class ColorPickerVM {
     
     var hasTappedCursor: Bool = false
     var gridIntensity: CGFloat = 0.0
-    var isStationary: Bool = true
     
     var isAtLeftmostValBoundary: Bool = false
     var isAtRightmostValBoundary: Bool = false
@@ -157,8 +154,6 @@ final internal class ColorPickerVM {
                 opacity: normalizedAlpha
             )
         }
-        
-        setInitialPickerCursor(color: &color)
     }
     
     /**
@@ -254,32 +249,6 @@ final internal class ColorPickerVM {
     }
     
     /**
-        Sets the initial circular hue picker cursor based off of the current color.
-     
-        - Parameter color: The current `Color` that is being displayed.
-     */
-
-    func setInitialPickerCursor(color: inout Color) {
-        let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
-        let maxRadius = min(pickerSize.width * 0.85, pickerSize.height * 0.85) / 2.0 // 0.85 gives wheel some padding so that it doesn't extend outside rect
-        
-        let (h,s,v,a) = colorToHsv(color: color)
-        
-        value = v
-        alpha = a
-        
-        let angle = h * 2.0 * .pi
-        let currentRadius = maxRadius * s
-        
-        let x = center.x + (currentRadius * cos(angle))
-        let y = center.y + (currentRadius * sin(angle))
-        
-        hsvToRgb(h: h, s: s, v: v, a: a, color: &color)
-        
-        pickerCursor = CGPoint(x: x, y: y)
-    }
-    
-    /**
         Utilizes circular hue logic to update both the cursor of the picker and
         the current color to the new color that is created. The inputs are then updated
         to match the new color.
@@ -289,24 +258,18 @@ final internal class ColorPickerVM {
             - color: The current color that is being displayed.
      */
     
-    func picker(location: CGPoint, color: inout Color) {
+    func picker(location: CGPoint, size: CGSize, color: inout Color) {
 
-        let center = CGPoint(x: pickerSize.width / 2.0, y: pickerSize.height / 2.0)
-        let maxRadius = min(pickerSize.width * 0.85, pickerSize.height * 0.85) / 2.0
+        let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
+        let maxRadius = min(size.width * 0.85, size.height * 0.85) / 2.0
+        
+        guard maxRadius > 0 else { return }
 
         let dx = location.x - center.x
         let dy = location.y - center.y
 
         let distance = hypot(dx, dy)
         let angle = atan2(dy, dx)
-
-        if distance > maxRadius {
-            let clampedX = center.x + (maxRadius * cos(angle))
-            let clampedY = center.y + (maxRadius * sin(angle))
-            pickerCursor = CGPoint(x: clampedX, y: clampedY)
-        } else {
-            pickerCursor = location
-        }
 
         let clampedDistance = min(distance, maxRadius)
         let saturation = clampedDistance / maxRadius
@@ -445,7 +408,6 @@ final internal class ColorPickerVM {
         color = Color(uiColor: rgb)
         
         setInputs(color: &color)
-        setInitialPickerCursor(color: &color)
     }
     
     /**
@@ -463,6 +425,5 @@ final internal class ColorPickerVM {
         alpha = 1.0
         
         setInputs(color: &color)
-        setInitialPickerCursor(color: &color)
     }
 }

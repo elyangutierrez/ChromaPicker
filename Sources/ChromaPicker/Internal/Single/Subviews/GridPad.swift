@@ -18,7 +18,6 @@ internal struct GridPad: View {
     // 1. Pass the cursor in so the Canvas can read it!
     var cursor: CGPoint
     var dragIntensity: CGFloat
-    var isStationary: Bool
     var currentColor: Color
     
     var spacing: CGFloat = 13.0
@@ -90,5 +89,5 @@ internal struct GridPad: View {
 }
 
 #Preview {
-    GridPad(cursor: .zero, dragIntensity: 1.0, isStationary: false, currentColor: .red)
+    GridPad(cursor: .zero, dragIntensity: 1.0, currentColor: .red)
 }
