@@ -121,8 +121,25 @@ internal struct GradientPickerView: View {
             vm.setEditableStops(stops: stops)
         }
         .onChange(of: vm.editableStops) { _, newEditableStops in
-            vm.editableStops.sort()
             stops = newEditableStops.map { $0.stop }.sorted { $0.location < $1.location }
+            
+            // checks if the stop is out of order
+            var isOutOfOrder = false
+            if newEditableStops.count > 1 {
+                for i in 0..<(newEditableStops.count - 1) {
+                    if newEditableStops[i].stop.location > newEditableStops[i + 1].stop.location {
+                        isOutOfOrder = true
+                        break
+                    }
+                }
+            }
+            
+            // triggers change when a stop is out of order
+            if isOutOfOrder {
+                withAnimation(.spring(duration: 0.3)) {
+                    vm.editableStops.sort { $0.stop.location < $1.stop.location }
+                }
+            }
         }
         .scrollIndicators(.hidden)
         .safeAreaInset(edge: .bottom) {
