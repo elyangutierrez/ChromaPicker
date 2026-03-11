@@ -353,6 +353,20 @@ final internal class ColorPickerVM {
     }
     
     /**
+        Updates the existing variables to match the values from the
+        current color.
+     
+        - Parameter color: The current color that is being displayed.
+     */
+    
+    func updateVariables(color: Color) {
+        let (_, _, v, a) = colorToHsv(color: color)
+        
+        value = v
+        alpha = a
+    }
+    
+    /**
         Returns the HSV representation of the current color given.
      
         - Parameter color: The current color that is being displayed.
@@ -406,6 +420,8 @@ final internal class ColorPickerVM {
         
         let rgb = UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: alpha)
         color = Color(uiColor: rgb)
+        
+        updateVariables(color: color)
         
         setInputs(color: &color)
     }
