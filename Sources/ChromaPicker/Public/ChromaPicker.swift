@@ -77,6 +77,8 @@ public struct ChromaPicker<S: ChromaSelection>: View {
                         .frame(width: 25, height: 25)
                 )
         }
+        .accessibilityLabel("Color Picker")
+        .accessibilityHint("Tap to use the color picker.")
         .buttonStyle(.plain)
         .sheet(isPresented: $isShowingView) {
             selection.makePickerView($selection)
