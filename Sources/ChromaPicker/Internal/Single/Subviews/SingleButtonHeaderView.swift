@@ -32,6 +32,8 @@ internal struct SingleButtonHeaderView: View {
                         .pickerButtonStyle(colorScheme: colorScheme, scale: 0.7)
                 }
             }
+            .accessibilityLabel("Reset Color")
+            .accessibilityHint("Resets the current color being displayed.")
             
             Button(action: {
                 Haptics.tap()
@@ -44,19 +46,24 @@ internal struct SingleButtonHeaderView: View {
                         .pickerButtonStyle(colorScheme: colorScheme, scale: 0.6)
                 }
             }
-        }
-        
-        Spacer()
-        
-        Button(action: {
-            Haptics.tap()
-            dismiss()
-        }) {
-            ZStack {
-                Image(systemName: "xmark")
-                    .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+            .accessibilityLabel("Shuffle Color")
+            .accessibilityHint("Randomizes the current color being displayed.")
+            
+            Spacer()
+            
+            Button(action: {
+                Haptics.tap()
+                dismiss()
+            }) {
+                ZStack {
+                    Image(systemName: "xmark")
+                        .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
+                }
             }
-        }    }
+            .accessibilityLabel("Exit Picker")
+            .accessibilityHint("Exit the color picker.")
+        }
+    }
 }
 
 #Preview {

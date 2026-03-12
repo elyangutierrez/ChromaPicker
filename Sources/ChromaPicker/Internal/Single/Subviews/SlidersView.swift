@@ -64,6 +64,10 @@ internal struct SlidersView: View {
                     .geometryReader { g in
                         vm.valueSize = g?.size ?? .zero
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Value Slider")
+                    .accessibilityHint("Drag the cursor to change the value.")
+                    .accessibilityValue("Value: \(vm.value * 100.0, specifier: "%.2f")")
             }
             
             ZStack {
@@ -105,6 +109,10 @@ internal struct SlidersView: View {
                     .geometryReader { g in
                         vm.alphaSize = g?.size ?? .zero
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Alpha Slider")
+                    .accessibilityHint("Drag the cursor to change the alpha.")
+                    .accessibilityValue("Alpha: \(vm.alpha * 100.0, specifier: "%.2f")")
             }
         }
     }

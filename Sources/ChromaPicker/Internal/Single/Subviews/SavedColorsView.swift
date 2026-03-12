@@ -34,6 +34,7 @@ internal struct SavedColorsView: View {
                 Image(systemName: "plus")
                     .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
             }
+            .accessibilityLabel("Add To Saved Colors")
             
             ForEach(vm.colorStore.savedColors, id: \.self) { savedColor in
                 Circle()
