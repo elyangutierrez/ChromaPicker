@@ -7,7 +7,24 @@
 
 import Foundation
 
+/**
+    Contains helpers used for accessibility.
+ */
+
 internal struct Accessibility {
+    
+    /**
+        Generates a name used for accessibility with the color that is given.
+     
+        - Parameters:
+            - h: The value that represents hue.
+            - s: The value that represents saturation.
+            - v: The value that represents value.
+     
+        - Returns: A name that represents the color being displayed.
+     */
+    
+    
     static func getAccessibleColorName(h: Double, s: Double, v: Double) -> String {
         // 1. Handle Grays/Black/White (Low Saturation)
         if s < 0.1 {
