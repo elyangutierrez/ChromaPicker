@@ -35,6 +35,9 @@ internal struct InputsView: View {
                         .fill(Color.clear)
                         .frame(height: 35)
                 )
+                .accessibilityLabel("Color Model Selector")
+                .accessibilityHint("Select from HSV, RGB, and Hex.")
+                .accessibilityValue("Current Model: \(vm.colorModel.rawValue)")
             }
             
             Spacer()
@@ -67,6 +70,9 @@ internal struct InputsView: View {
                                 }
                             }
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Enter Hex Value")
+                        .accessibilityValue(vm.hexValue)
                 } else {
                     RoundedRectangle(cornerRadius: 10.0)
                         .stroke(.gray, lineWidth: 0.5)
@@ -104,6 +110,9 @@ internal struct InputsView: View {
                                 }
                             }
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(vm.colorModel == ColorModel.hsv ? "Enter Hue Value" : "Enter Red Value")
+                        .accessibilityValue(vm.textboxOne.formatted())
                     
                     RoundedRectangle(cornerRadius: 10.0)
                         .stroke(.gray, lineWidth: 0.5)
@@ -141,6 +150,9 @@ internal struct InputsView: View {
                                 }
                             }
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(vm.colorModel == ColorModel.hsv ? "Enter Saturation Value" : "Enter Green Value")
+                        .accessibilityValue(vm.textboxTwo.formatted())
                     
                     RoundedRectangle(cornerRadius: 10.0)
                         .stroke(.gray, lineWidth: 0.5)
@@ -178,6 +190,9 @@ internal struct InputsView: View {
                                 }
                             }
                         }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(vm.colorModel == ColorModel.hsv ? "Enter Value" : "Enter Blue Value")
+                        .accessibilityValue(vm.textboxThree.formatted())
                 }
                 
                 RoundedRectangle(cornerRadius: 10.0)
@@ -205,6 +220,9 @@ internal struct InputsView: View {
                             }
                         }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Enter Alpha Value")
+                    .accessibilityValue(vm.alphaTextbox.formatted())
             }
         }
     }

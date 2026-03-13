@@ -74,6 +74,10 @@ internal struct CircularHuePickerView: View {
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Circular Hue Picker")
+            .accessibilityHint("Drag the cursor to change the color.")
+            .accessibilityValue(getAccessibilityValueString())
     }
     
     func getGridCursorPosition(size: CGSize, for color: Color) -> CGPoint {
@@ -93,6 +97,17 @@ internal struct CircularHuePickerView: View {
         let y = center.y + (currentRadius * sin(angle))
         
         return CGPoint(x: x, y: y)
+    }
+    
+    func getAccessibilityValueString() -> String {
+        let (h, s, v, _) = vm.colorToHsv(color: color)
+        
+        let colorName = Accessibility.getAccessibleColorName(h: h, s: s, v: v)
+        
+        let hueDegrees = Int(h * 360)
+        let satPercent = Int(s * 100)
+        
+        return "\(colorName). Hue \(hueDegrees) degrees, Saturation \(satPercent) percent."
     }
 }
 

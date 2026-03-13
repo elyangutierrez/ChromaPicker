@@ -61,6 +61,9 @@ internal struct GradientSliderBar: View {
                 }
             }
             .coordinateSpace(name: "GradientBarSpace")
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Gradient Slider")
+            .accessibilityHint("Drag the cursors to change the location of the color within the gradient.")
         }
         .frame(height: 80)
     }
