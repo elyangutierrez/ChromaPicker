@@ -31,6 +31,8 @@ internal struct GradientButtonHeaderView: View {
                         .pickerButtonStyle(colorScheme: colorScheme, scale: 0.7)
                 }
             }
+            .accessibilityLabel("Reset Gradient")
+            .accessibilityHint("Resets the gradient to a monochromatic gradient.")
             
             Button(action: {
                 Haptics.tap()
@@ -44,6 +46,8 @@ internal struct GradientButtonHeaderView: View {
                         .contentTransition(.symbolEffect(.replace))
                 }
             }
+            .accessibilityLabel("Lock Gradient Orientation")
+            .accessibilityHint("Prevents it from changing as you add a new color.")
             
             Spacer()
             
@@ -56,6 +60,8 @@ internal struct GradientButtonHeaderView: View {
                         .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
                 }
             }
+            .accessibilityLabel("Close Picker")
+            .accessibilityHint("Close the picker window.")
         }
     }
 }

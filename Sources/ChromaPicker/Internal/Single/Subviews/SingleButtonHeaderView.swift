@@ -60,8 +60,8 @@ internal struct SingleButtonHeaderView: View {
                         .pickerButtonStyle(colorScheme: colorScheme, scale: 0.5)
                 }
             }
-            .accessibilityLabel("Exit Picker")
-            .accessibilityHint("Exit the color picker.")
+            .accessibilityLabel("Close Picker")
+            .accessibilityHint("Close the picker window.")
         }
     }
 }

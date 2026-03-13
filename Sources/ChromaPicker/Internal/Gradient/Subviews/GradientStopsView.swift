@@ -54,7 +54,13 @@ internal struct GradientStopsView: View {
                 }
             }
         }
-
+        .accessibilityLabel("Gradient Stops")
+        .accessibilityHint(
+            """
+            Each stop represents a specific color in the gradient aswell as its location.
+            Tap the color to change it or manually enter the hex value of the new color.
+            """
+        )
     }
 }
 
