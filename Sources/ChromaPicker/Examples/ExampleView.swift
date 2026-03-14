@@ -19,6 +19,9 @@ struct ExampleView: View {
     
     let modes = ["Single", "Stops"]
     
+    var supportsAlpha: Bool
+    var canSaveColors: Bool
+    
     var body: some View {
         NavigationStack {
             GeometryReader { g in
@@ -43,9 +46,9 @@ struct ExampleView: View {
                             Spacer()
                             
                             if currentMode == "Single" {
-                                ChromaPicker(selection: $color)
+                                ChromaPicker(selection: $color, supportsAlpha: supportsAlpha, canSaveColors: canSaveColors)
                             } else {
-                                ChromaPicker(selection: $stops)
+                                ChromaPicker(selection: $stops, supportsAlpha: supportsAlpha, canSaveColors: canSaveColors)
                             }
                         }
                         
@@ -69,6 +72,14 @@ struct ExampleView: View {
     }
 }
 
-#Preview {
-    ExampleView()
+#Preview("Default") {
+    ExampleView(supportsAlpha: true, canSaveColors: true)
+}
+
+#Preview("No Alpha") {
+    ExampleView(supportsAlpha: false, canSaveColors: true)
+}
+
+#Preview("No Saving") {
+    ExampleView(supportsAlpha: true, canSaveColors: false)
 }

@@ -15,6 +15,7 @@ internal struct ColorPickerView: View {
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.chromaConfig) var chromaConfig
     
     @State private var vm: ColorPickerVM = ColorPickerVM()
     
@@ -46,11 +47,13 @@ internal struct ColorPickerView: View {
                             InputsView(vm: vm, color: $color)
                         }
                         
-                        VStack {
-                            SavedColorsView(vm: vm, color: $color)
+                        if chromaConfig.canSaveColors {
+                            VStack {
+                                SavedColorsView(vm: vm, color: $color)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 5)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 5)
                     }
                 }
                 .padding()

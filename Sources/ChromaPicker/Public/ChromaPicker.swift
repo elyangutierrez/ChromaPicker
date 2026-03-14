@@ -86,12 +86,12 @@ public struct ChromaPicker<S: ChromaSelection>: View {
                         .frame(width: 25, height: 25)
                 )
         }
-        .environment(\.chromaConfig, config)
         .accessibilityLabel("Color Picker")
         .accessibilityHint("Tap to use the color picker.")
         .buttonStyle(.plain)
         .sheet(isPresented: $isShowingView) {
             selection.makePickerView($selection)
+                .environment(\.chromaConfig, config)
                 .presentationDetents([.fraction(0.9)])
         }
     }
