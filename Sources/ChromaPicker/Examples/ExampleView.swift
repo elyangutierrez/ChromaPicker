@@ -80,6 +80,6 @@ struct ExampleView: View {
     ExampleView(supportsAlpha: false, canSaveColors: true)
 }
 
-#Preview("No Saving") {
+#Preview("No Color Saving") {
     ExampleView(supportsAlpha: true, canSaveColors: false)
 }

@@ -8,11 +8,11 @@
 import Foundation
 import SwiftUI
 
-public struct ChromaConfig: Sendable {
+internal struct ChromaConfig: Sendable {
     public var supportsAlpha: Bool
     public var canSaveColors: Bool
     
-    public init(
+    init(
         supportsAlpha: Bool = true,
         canSaveColors: Bool = true
     ) {
