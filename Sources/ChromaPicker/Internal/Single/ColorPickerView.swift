@@ -95,7 +95,7 @@ internal struct ColorPickerView: View {
     }
 }
 
-#Preview {
+#Preview("Default") {
     
     @Previewable @State var binding: Color = .white
     

@@ -51,9 +51,18 @@ public struct ChromaPicker<S: ChromaSelection>: View {
     }
     
     @Binding var selection: S
+    var config: ChromaConfig
     
-    public init(selection: Binding<S>) {
+    public init(
+        selection: Binding<S>,
+        supportsAlpha: Bool = true,
+        canSaveColors: Bool = true
+    ) {
         self._selection = selection
+        self.config = ChromaConfig(
+            supportsAlpha: supportsAlpha,
+            canSaveColors: canSaveColors
+        )
     }
     
     public var body: some View {
@@ -77,6 +86,7 @@ public struct ChromaPicker<S: ChromaSelection>: View {
                         .frame(width: 25, height: 25)
                 )
         }
+        .environment(\.chromaConfig, config)
         .accessibilityLabel("Color Picker")
         .accessibilityHint("Tap to use the color picker.")
         .buttonStyle(.plain)
