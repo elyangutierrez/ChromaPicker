@@ -166,7 +166,7 @@ internal struct GradientPickerView: View {
     }
 }
 
-#Preview {
+#Preview("Default") {
     
     @Previewable @State var stops: [Gradient.Stop] =
     [

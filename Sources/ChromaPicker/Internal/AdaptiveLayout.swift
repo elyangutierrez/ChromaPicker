@@ -8,7 +8,7 @@
 import SwiftUI
 
 /**
-    Generates an adaptive layout with the types provided.
+    Generates an adaptive layout with the views provided.
  */
 
 internal struct AdaptiveLayout<Portrait: View, Landscape: View>: View {

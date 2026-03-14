@@ -13,6 +13,7 @@ import SwiftUI
 
 internal struct SlidersView: View {
     
+    @Environment(\.chromaConfig) var chromaConfig
     @Environment(\.colorScheme) var colorScheme
     
     @Bindable var vm: ColorPickerVM
@@ -70,49 +71,51 @@ internal struct SlidersView: View {
                     .accessibilityValue("Value: \(vm.value * 100.0, specifier: "%.2f")")
             }
             
-            ZStack {
-                Checkerboard(color: color)
-                    .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                    .frame(height: 32)
-                    .background(
-                        LinearGradient(colors: [.white.opacity(0.0), color], startPoint: .leading, endPoint: .trailing)
-                            .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                    )
-                    .overlay {
-                        GeometryReader { geo in
-                            let cursorRadius: CGFloat = 15.0
-                            let usableWidth = geo.size.width - (cursorRadius * 2)
-                            let xPos = cursorRadius + (usableWidth * vm.alpha)
-                            
-                            Circle()
-                                .colorCircle(color: color, size1: cursorRadius * 2.0, size2: 18, colorScheme: colorScheme)
-                                .scaleEffect(vm.alphaScale)
-                                .position(x: xPos, y: geo.size.height / 2.0)
-                        }
-                    }
-                    .gesture(
-                        DragGesture(minimumDistance: 0.0)
-                            .onChanged { newValue in
-                                if !vm.hasTappedCursor {
-                                    vm.hasTappedCursor = true
-                                    Haptics.tap()
-                                }
+            if chromaConfig.supportsAlpha {
+                ZStack {
+                    Checkerboard(color: color)
+                        .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                        .frame(height: 32)
+                        .background(
+                            LinearGradient(colors: [.white.opacity(0.0), color], startPoint: .leading, endPoint: .trailing)
+                                .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                        )
+                        .overlay {
+                            GeometryReader { geo in
+                                let cursorRadius: CGFloat = 15.0
+                                let usableWidth = geo.size.width - (cursorRadius * 2)
+                                let xPos = cursorRadius + (usableWidth * vm.alpha)
                                 
-                                vm.setScaleUp(type: .alpha)
-                                vm.slider(location: newValue.location, type: .alpha, color: &color)
+                                Circle()
+                                    .colorCircle(color: color, size1: cursorRadius * 2.0, size2: 18, colorScheme: colorScheme)
+                                    .scaleEffect(vm.alphaScale)
+                                    .position(x: xPos, y: geo.size.height / 2.0)
                             }
-                            .onEnded { _ in
-                                vm.hasTappedCursor = false
-                                vm.setScaleDown(type: .alpha)
-                            }
-                    )
-                    .geometryReader { g in
-                        vm.alphaSize = g?.size ?? .zero
-                    }
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("Alpha Slider")
-                    .accessibilityHint("Drag the cursor to change the alpha.")
-                    .accessibilityValue("Alpha: \(vm.alpha * 100.0, specifier: "%.2f")")
+                        }
+                        .gesture(
+                            DragGesture(minimumDistance: 0.0)
+                                .onChanged { newValue in
+                                    if !vm.hasTappedCursor {
+                                        vm.hasTappedCursor = true
+                                        Haptics.tap()
+                                    }
+                                    
+                                    vm.setScaleUp(type: .alpha)
+                                    vm.slider(location: newValue.location, type: .alpha, color: &color)
+                                }
+                                .onEnded { _ in
+                                    vm.hasTappedCursor = false
+                                    vm.setScaleDown(type: .alpha)
+                                }
+                        )
+                        .geometryReader { g in
+                            vm.alphaSize = g?.size ?? .zero
+                        }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Alpha Slider")
+                        .accessibilityHint("Drag the cursor to change the alpha.")
+                        .accessibilityValue("Alpha: \(vm.alpha * 100.0, specifier: "%.2f")")
+                }
             }
         }
     }

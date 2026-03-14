@@ -51,9 +51,18 @@ public struct ChromaPicker<S: ChromaSelection>: View {
     }
     
     @Binding var selection: S
+    var config: ChromaConfig
     
-    public init(selection: Binding<S>) {
+    public init(
+        selection: Binding<S>,
+        supportsAlpha: Bool = true,
+        canSaveColors: Bool = true
+    ) {
         self._selection = selection
+        self.config = ChromaConfig(
+            supportsAlpha: supportsAlpha,
+            canSaveColors: canSaveColors
+        )
     }
     
     public var body: some View {
@@ -82,6 +91,7 @@ public struct ChromaPicker<S: ChromaSelection>: View {
         .buttonStyle(.plain)
         .sheet(isPresented: $isShowingView) {
             selection.makePickerView($selection)
+                .environment(\.chromaConfig, config)
                 .presentationDetents([.fraction(0.9)])
         }
     }

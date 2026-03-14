@@ -15,6 +15,7 @@ import SwiftUI
 internal struct InputsView: View {
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.chromaConfig) var chromaConfig
     
     @Bindable var vm: ColorPickerVM
     @Binding var color: Color
@@ -195,34 +196,36 @@ internal struct InputsView: View {
                         .accessibilityValue(vm.textboxThree.formatted())
                 }
                 
-                RoundedRectangle(cornerRadius: 10.0)
-                    .stroke(.gray, lineWidth: 0.5)
-                    .fill(.regularMaterial)
-                    .frame(width: 60, height: 35)
-                    .overlay {
-                        VStack(alignment: .center) {
-                            TextField("", value: Binding(
-                                get: { vm.alphaTextbox },
-                                set: { newValue in
-                                    if newValue >= 0.0 && newValue <= 100.0 {
-                                        vm.alphaTextbox = newValue
-                                    } else {
-                                        vm.alphaTextbox = 100.0
-                                    }
-                                }),
-                                format: .number
-                            )
-                            .tint(colorScheme == .dark ? .white : .black)
-                            .fontWeight(.medium)
-                            .multilineTextAlignment(.center)
-                            .onSubmit {
-                                vm.updateColorFromInputs(color: &color)
+                if chromaConfig.supportsAlpha {
+                    RoundedRectangle(cornerRadius: 10.0)
+                        .stroke(.gray, lineWidth: 0.5)
+                        .fill(.regularMaterial)
+                        .frame(width: 60, height: 35)
+                        .overlay {
+                            VStack(alignment: .center) {
+                                TextField("", value: Binding(
+                                    get: { vm.alphaTextbox },
+                                    set: { newValue in
+                                        if newValue >= 0.0 && newValue <= 100.0 {
+                                            vm.alphaTextbox = newValue
+                                        } else {
+                                            vm.alphaTextbox = 100.0
+                                        }
+                                    }),
+                                          format: .number
+                                )
+                                .tint(colorScheme == .dark ? .white : .black)
+                                .fontWeight(.medium)
+                                .multilineTextAlignment(.center)
+                                .onSubmit {
+                                    vm.updateColorFromInputs(color: &color)
+                                }
                             }
                         }
-                    }
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("Enter Alpha Value")
-                    .accessibilityValue(vm.alphaTextbox.formatted())
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Enter Alpha Value")
+                        .accessibilityValue(vm.alphaTextbox.formatted())
+                }
             }
         }
     }

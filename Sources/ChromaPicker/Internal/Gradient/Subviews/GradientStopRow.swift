@@ -12,7 +12,9 @@ import SwiftUI
  */
 
 internal struct GradientStopRow: View {
+    
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.chromaConfig) var chromaConfig
     
     @State private var locationValue: Double = 0.0
     @State private var hexValue: String = ""
@@ -78,24 +80,26 @@ internal struct GradientStopRow: View {
                     .tint(colorScheme == .dark ? .white : .black)
                     .onSubmit { updateStop() }
                     
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.25))
-                        .frame(width: 1)
-                    
-                    TextField("", value: Binding(
-                        get: { alphaValue },
-                        set: { newValue in
-                            if newValue >= 0.0 && newValue <= 100.0 {
-                                alphaValue = newValue
-                            } else {
-                                alphaValue = 100.0
-                            }
-                        }), format: .number)
+                    if chromaConfig.supportsAlpha {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.25))
+                            .frame(width: 1)
+                        
+                        TextField("", value: Binding(
+                            get: { alphaValue },
+                            set: { newValue in
+                                if newValue >= 0.0 && newValue <= 100.0 {
+                                    alphaValue = newValue
+                                } else {
+                                    alphaValue = 100.0
+                                }
+                            }), format: .number)
                         .font(.headline)
                         .multilineTextAlignment(.center)
                         .onSubmit { updateStop() }
                         .tint(colorScheme == .dark ? .white : .black)
                         .frame(width: 50)
+                    }
                 }
             }
             .frame(height: 40)
