@@ -53,8 +53,31 @@ ChromaPicker is a highly performant, native SwiftUI color picking package design
   </div>
 </div>
 
+## Installation 
 
-## Installation
+### Swift Package Manager (Xcode)
+
+1. In Xcode, go to **File > Add Packages...**
+2. Enter the repository URL: `https://github.com/elyangutierrez/ChromaPicker.git`
+3. Choose the version rule you want (e.g., "Up to Next Major Version") and click **Add Package**.
+
+### Swift Package Manager (Package.swift)
+If you are building your own Swift Package, add ChromaPicker as a dependency in your `Package.swift` file:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/elyangutierrez/ChromaPicker.git", from: "1.0.0")
+]
+```
+
+Then, add it to your target's dependencies:
+
+```swift
+.target(
+    name: "YourTarget",
+    dependencies: ["ChromaPicker"]
+)
+```
 
 ## Usage
 
