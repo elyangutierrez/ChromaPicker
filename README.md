@@ -25,9 +25,19 @@ A SwiftUI package that gives you a new and improved color picker.
     <li><a href="#license">License</a></li>
 </ol>
 
+<hr>
+
 ## About
 
+ChromaPicker is a highly performant, native SwiftUI color picking package designed for modern IOS applications. Built from the ground up to support both single color and complex gradient selections, it features a buttery-smooth 2D interactive grid pad, dynamic live-reordering gradient stops, and seamless orientation adaptation. 
+
 ## Features
+
+-  Single color and complex gradient selections 
+-  Inspired and modern design
+-  Custom sliders
+-  Input fields for easy access 
+-  Seamless setup and configuration
 
 ## Examples
 
