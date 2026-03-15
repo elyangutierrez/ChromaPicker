@@ -55,6 +55,14 @@ ChromaPicker is a highly performant, native SwiftUI color picking package design
 
 ## Installation 
 
+### Requirements
+
+Swift: `>=6.2.4`
+
+Xcode: `>=26.3`
+
+iOS: `>=26.0`
+
 ### Swift Package Manager (Xcode)
 
 1. In Xcode, go to **File > Add Packages...**
