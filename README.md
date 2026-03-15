@@ -41,6 +41,19 @@ ChromaPicker is a highly performant, native SwiftUI color picking package design
 
 ## Examples
 
+<div style="display:flex; justify-content:center; gap:20px; text-align:center;">
+  <div>
+    <h3>Single Selection</h3>
+    <img src="Assets/single_example.gif">
+  </div>
+
+  <div>
+    <h3>Stops Selection</h3>
+    <img src="Assets/stops_example.gif">
+  </div>
+</div>
+
+
 ## Installation
 
 ## Usage
