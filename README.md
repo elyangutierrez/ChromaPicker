@@ -134,7 +134,7 @@ ChromaPicker(selection: $color, supportsAlpha: false, canSaveColors: false)
 
 ## Contributing
 
-For more information about contributing, please read [CONTRIBUTING](./CONTRIBUTING.md).
+Your support is welcomed! All feature requests, pull requests and GitHub stars are appreciated. ❤️
 
 ## License
 
