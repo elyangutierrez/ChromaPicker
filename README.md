@@ -22,6 +22,7 @@ A SwiftUI package that gives you a new and improved color picker.
     <li><a href="#examples">Examples</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
 </ol>
 
@@ -36,6 +37,7 @@ ChromaPicker is a highly performant, native SwiftUI color picking package design
 -  Single color and complex gradient selections 
 -  Inspired and modern design
 -  Custom sliders
+-  HSV, RGB, and HEX color models
 -  Input fields for easy access 
 -  Seamless setup and configuration
 
@@ -89,4 +91,54 @@ Then, add it to your target's dependencies:
 
 ## Usage
 
+To use ChromaPicker in your projects, follow the steps down below:
+
+
+
+Import ChromaPicker to your file:
+
+```swift
+import ChromaPicker
+```
+
+Create a `@State` variable for your selection:
+
+```swift
+@State private var color: Color = .red
+```
+
+or
+
+```swift
+@State private var stops: [Gradient.Stop] = [
+  .init(color: .blue, location: 0.2),
+  .init(color: .red, location: 0.5),
+  .init(color: .green, location: 0.7)
+]
+```
+
+Then add ChromaPicker to your view:
+
+```swift
+ChromaPicker(selection: $color)
+```
+
+or
+
+```swift
+ChromaPicker(selection: $stops)
+```
+
+For more customization, you can customize the picker to your liking:
+
+```swift
+ChromaPicker(selection: $color, supportsAlpha: false, canSaveColors: false)
+```
+
+## Contributing
+
+For more information about contributing, please read [CONTRIBUTING](./CONTRIBUTING.md).
+
 ## License
+
+This package uses the `MIT License`. For more information, please read [LICENSE](./LICENSE).
