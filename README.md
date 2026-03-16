@@ -8,7 +8,6 @@
 
 <div align="center">
 
-<hr>
 
 A SwiftUI package that gives you a new and improved color picker.
 
@@ -25,8 +24,6 @@ A SwiftUI package that gives you a new and improved color picker.
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
 </ol>
-
-<hr>
 
 ## About
 
