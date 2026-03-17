@@ -10,18 +10,18 @@ import Testing
 
 @Suite("Util Function Testing")
 struct UtilTests {
-
-    @Test
+    
+    @Test("Tests the case where the value is out of bounds of the min and max boundaries.")
     func testOutOfBoundsClamp() {
         #expect(Util.clamp(-5, min: 0, max: 10) == 0)
     }
     
-    @Test
+    @Test("Tests the case where the value is in bounds of the min and max boundaries.")
     func testInBoundsClamp() {
         #expect(Util.clamp(3, min: 0, max: 5) == 3)
     }
     
-    @Test
+    @Test("Tests the case where the value on either one of the min and max boundaries.")
     func testOnBoundaryClamp() {
         #expect(Util.clamp(0, min: 0, max: 5) == 0)
     }
