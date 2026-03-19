@@ -56,12 +56,14 @@ public struct ChromaPicker<S: ChromaSelection>: View {
     public init(
         selection: Binding<S>,
         supportsAlpha: Bool = true,
-        canSaveColors: Bool = true
+        canSaveColors: Bool = true,
+        maxStopCount: Int = 10
     ) {
         self._selection = selection
         self.config = ChromaConfig(
             supportsAlpha: supportsAlpha,
-            canSaveColors: canSaveColors
+            canSaveColors: canSaveColors,
+            maxStopCount: maxStopCount
         )
     }
     

@@ -26,14 +26,12 @@ internal struct Accessibility {
     
     
     static func getAccessibleColorName(h: Double, s: Double, v: Double) -> String {
-        // 1. Handle Grays/Black/White (Low Saturation)
         if s < 0.1 {
             if v > 0.9 { return "White" }
             if v < 0.15 { return "Black" }
             return "Gray"
         }
         
-        // 2. Determine base color by Hue (0.0 to 1.0)
         let hueDegrees = h * 360.0
         var colorName = ""
         
@@ -48,7 +46,6 @@ internal struct Accessibility {
         default: colorName = "Color"
         }
         
-        // 3. Add adjectives based on Saturation and Value
         var adjective = ""
         if s < 0.4 { adjective = "Pale " }
         else if s > 0.8 && v > 0.8 { adjective = "Vivid " }
