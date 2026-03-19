@@ -129,7 +129,7 @@ ChromaPicker(selection: $stops)
 For more customization, you can customize the picker to your liking:
 
 ```swift
-ChromaPicker(selection: $color, supportsAlpha: false, canSaveColors: false)
+ChromaPicker(selection: $color, supportsAlpha: false, canSaveColors: false, maxStopCount: 5)
 ```
 
 ## Contributing
