@@ -17,6 +17,7 @@ internal struct GradientPickerView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.chromaConfig) var chromaConfig
     
     @State private var vm: GradientPickerVM = GradientPickerVM()
     
@@ -55,6 +56,10 @@ internal struct GradientPickerView: View {
                                 Spacer()
                                 
                                 Button(action: {
+                                    guard vm.editableStops.count < chromaConfig.maxStopCount else {
+                                        return
+                                    }
+                                    
                                     Haptics.tap()
                                     
                                     withAnimation(.spring(duration: 0.3)) {
@@ -95,6 +100,10 @@ internal struct GradientPickerView: View {
                                 Spacer()
                                 
                                 Button(action: {
+                                    guard vm.editableStops.count < chromaConfig.maxStopCount else {
+                                        return
+                                    }
+                                    
                                     Haptics.tap()
                                     
                                     withAnimation(.spring(duration: 0.3)) {
