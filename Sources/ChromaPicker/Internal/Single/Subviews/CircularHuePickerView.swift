@@ -29,7 +29,7 @@ internal struct CircularHuePickerView: View {
         RoundedRectangle(cornerRadius: 15.0)
             .stroke(.gray, lineWidth: 0.5)
             .fill(.regularMaterial)
-            .frame(maxWidth: .infinity, minHeight: 375)
+            .frame(maxWidth: .infinity, minHeight: height, maxHeight: height)
             .overlay {
                 GeometryReader { geo in
                     let cursorPosition = getGridCursorPosition(size: geo.size, for: color)
