@@ -119,9 +119,9 @@ internal struct GradientPickerView: View {
                                 VStack(spacing: 20) {
                                     GradientStopsView(vm: vm)
                                 }
-                                .safeAreaPadding(.vertical, 5)
-                                .safeAreaPadding(.horizontal)
                             }
+                            .safeAreaPadding(.horizontal)
+                            .safeAreaPadding(.vertical, 5)
                         }
                     }
                 }
